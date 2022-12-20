@@ -130,11 +130,21 @@ app.get('/proxy2', (req, res) => {
   });
 }); 
 
+app.post('/login', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Content-Type', 'text/plain; charset=UTF-8');
+
+  var payload = `이메일: ${req.body.email}\n`;
+  payload += `암호: ${req.body.password}\n`;
+
+  res.send(payload);
+}); 
+
 // 웹서버 실행하기
 app.listen(
   3000,       // 포트 번호 지정
   () => {     // 서버가 시작되었을 때 호출될 함수 = 리스너 = 이벤트 핸들러
-    console.log(`${port}번 포트에서 서버 시작했음!`);
+    console.log(`${port}번 포트에서 서버 시작`);
   } 
 );
 
