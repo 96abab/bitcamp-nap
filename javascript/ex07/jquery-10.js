@@ -12,9 +12,8 @@ function jQuery(selector) {
   return new ElementBox(selector);
 }
 
-
 function ElementBox(selector) {
-  this.el = []; 
+  this.el = [];
 
   if (selector.startsWith("<")) {
     this.el[0] = document.createElement(selector.substring(1, selector.length - 1));
@@ -29,39 +28,31 @@ function ElementBox(selector) {
 
 ElementBox.prototype.append = function(childBox) {
   for (let parent of this.el) {
-
     for (let child of childBox.el) {
       parent.appendChild(child.cloneNode(true));
     }
   }
-
   for (let child of childBox.el) {
     if (child.parentElement != null || child.parentElement != undefined) {
       child.parentElement.removeChild(child);
     }
   }
-
   return this;
 };
 
-
-ElementBox.prototype.appendTo = function(parentsBox) {
-  for (let parentTag of parentsBox.el) {
-
+ElementBox.prototype.appendTo = function(parentBox) {
+  for (let parentTag of parentBox.el) {
     for (let child of this.el) {
       parentTag.appendChild(child.cloneNode(true));
     }
   }
-
   for (let child of this.el) {
     if (child.parentElement != null || child.parentElement != undefined) {
       child.parentElement.removeChild(child);
     }
   }
-
   return this;
 };
-
 
 ElementBox.prototype.html = function(content) {
   for (let e of this.el) {
@@ -74,13 +65,11 @@ ElementBox.prototype.on = function(eventName, listener) {
   for (let e of this.el) {
     e.addEventListener(eventName, listener);
   }
-
   return this;
 };
 
 ElementBox.prototype.click = function(handler) {
-  this.on('click', handler);
- };
- 
+  return this.on('click', handler);
+};
 
 var $ = jQuery;

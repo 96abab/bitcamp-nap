@@ -10,14 +10,13 @@
 //10. 리팩토링
 //11. ajax()
 //12. ajax() 코드 정리
-//13. getajax()
+//13. getJSON()
 function jQuery(selector) {
   return new ElementBox(selector);
 }
 
-
 function ElementBox(selector) {
-  this.el = []; 
+  this.el = [];
 
   if (selector.startsWith("<")) {
     this.el[0] = document.createElement(selector.substring(1, selector.length - 1));
@@ -32,39 +31,31 @@ function ElementBox(selector) {
 
 ElementBox.prototype.append = function(childBox) {
   for (let parent of this.el) {
-
     for (let child of childBox.el) {
       parent.appendChild(child.cloneNode(true));
     }
   }
-
   for (let child of childBox.el) {
     if (child.parentElement != null || child.parentElement != undefined) {
       child.parentElement.removeChild(child);
     }
   }
-
   return this;
 };
 
-
-ElementBox.prototype.appendTo = function(parentsBox) {
-  for (let parentTag of parentsBox.el) {
-
+ElementBox.prototype.appendTo = function(parentBox) {
+  for (let parentTag of parentBox.el) {
     for (let child of this.el) {
       parentTag.appendChild(child.cloneNode(true));
     }
   }
-
   for (let child of this.el) {
     if (child.parentElement != null || child.parentElement != undefined) {
       child.parentElement.removeChild(child);
     }
   }
-
   return this;
 };
-
 
 ElementBox.prototype.html = function(content) {
   for (let e of this.el) {
@@ -77,45 +68,45 @@ ElementBox.prototype.on = function(eventName, listener) {
   for (let e of this.el) {
     e.addEventListener(eventName, listener);
   }
-
   return this;
 };
 
 ElementBox.prototype.click = function(handler) {
-  this.on('click', handler);
- };
- 
+  return this.on('click', handler);
+};
 
- jQuery.ajax = function(settings) {
+
+jQuery.ajax = function(settings) {
   if (settings.method == undefined) settings.method = "GET";
   if (settings.async == undefined) settings.async = true;
+
   var xhr = new XMLHttpRequest();
   xhr.onreadystatechange = () => {
     if (xhr.readyState == 4) {
-        if (xhr.status == 200) {
-          if(settings.success == undefined) {
-            return;
-          }
-          let result;
-          if (settings.dataType == "json") {
-            // json
-            result = JSON.parse(xhr.responseText);
-          }else  {
-            result = xhr.responseText;
-          }
-          settings.success(result);
-
-        }else {
-          if(settings.error == undefined) {
-            return;
-          }
-          settings.error();
+      if (xhr.status == 200) {
+        if (settings.success == undefined) {
+          return;
         }
+        let result;
+        if (settings.dataType == "json") {
+          // json string ---> javascript object (deserialize)
+          result = JSON.parse(xhr.responseText);
+        } else {
+          result = xhr.responseText;
+        }
+        settings.success(result);
+
+      } else {
+        if (settings.error == undefined) {
+          return;
+        }
+        settings.error();
       }
-    };
-    xhr.open(settings.method, settings.url, settings.async);
-    xhr.send();
- };
+    }
+  };
+  xhr.open(settings.method, settings.url, settings.async);
+  xhr.send();
+};
 
 jQuery.getJSON = function(url, success) {
   jQuery.ajax({
@@ -124,4 +115,5 @@ jQuery.getJSON = function(url, success) {
     success: success
   });
 };
+
 var $ = jQuery;

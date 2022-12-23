@@ -10,7 +10,7 @@
 </style>
 </head>
 <body>
-<h1>jQuery 만들기 - 13. getajax() </h1>
+<h1>jQuery 만들기 - 13. getJSON()</h1>
 <table border="1">
 <thead>
     <tr><th>번호</th><th>제목</th><th>작성자</th><th>조회수</th></tr>
@@ -21,15 +21,6 @@
 <button id="btn1">데이터 가져오기!</button>
 
 <script src="jquery-13.js"></script>
-
-<script>
-function hello(name) {
-    console.log(name + "님 환영합니다");
-
-};
-hello("홍길동");
-</script>
-
 <script>
 "use strict"
 
@@ -38,19 +29,15 @@ var tbody = $("tbody");
 $("#btn1").click(() => {
     $.getJSON("http://localhost:3000/exam04-3", (result) => {
         for (var b of result) {
-                	$("<tr>")
-                    .html("<td>" + b.no + "</td>" + 
-                            "<td>" + b.title + "</td>" + 
-                            "<td>" + b.writer + "</td>" +
-                            "<td>" + b.viewCnt + "</td>")
-                    .appendTo(tbody);
-                }
+            $("<tr>")
+            .html("<td>" + b.no + "</td>" + 
+                    "<td>" + b.title + "</td>" + 
+                    "<td>" + b.writer + "</td>" +
+                    "<td>" + b.viewCnt + "</td>")
+            .appendTo(tbody);
+        }
     });
 });
-
-    
-    
-
 
 </script>
 </body>
