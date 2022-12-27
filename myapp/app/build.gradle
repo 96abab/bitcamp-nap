@@ -1,0 +1,36 @@
+plugins {
+    id 'application'
+    id 'eclipse'
+}
+// CLI 환경에서 build 작업 할 때 사용하는 설정 (커맨드라인)
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8' 
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
+}
+
+// eclipse 플러그인 설정 
+eclipse {
+    project {       // 프로젝트 이름 설정하기
+        name = "myapp"
+    }
+    jdt {       // eclipse IDE 설정하기
+      sourceCompatibility = 17
+      targetCompatibility = 17
+      javaRuntimeName = "JavaSE-17"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+
+    implementation 'com.google.guava:guava:31.1-jre'
+}
+
+application {
+    mainClass = 'bitcamp.myapp.App'
+}
