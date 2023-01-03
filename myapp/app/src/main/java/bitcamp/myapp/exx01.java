@@ -6,20 +6,16 @@ public class  exx01 {
   }
   public static void main(String[] args) {
     String a = "AAdfg";
-    String temp = "";
+    System.out.println(a.length());
+    //    문자 개수 세기
     for (int i = 0; i < a.length(); i++) {
-
-      char value = a.charAt(i);
-      //      if (value != ' ') {
-      //        int str = value;
-      //        System.out.println(str);
-      //        if ()
-      //      }
-      if (value != ' ') {
-
+      char temp = a.charAt(i);
+      System.out.println(temp);
+      if (a.charAt(i) == a.charAt(i+1)) {
+          
       }
 
-      System.out.println(value);
     }
   }
 }
+

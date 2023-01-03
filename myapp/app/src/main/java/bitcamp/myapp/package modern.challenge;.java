@@ -100,7 +100,8 @@ puvlic final class String {
       2. Character의 toString() 으로 Char를 String으로 반환
       String test = Character.toString(a) + Character.toString(b);
 
-      3. 
+      3. 문자를 빈 문자열과 연결하여 문자열로 변환
+      String test = "" + a + b;
        */
 
       result.compute(ch, (k, v) -> (v == null) ? 1 : ++v);
