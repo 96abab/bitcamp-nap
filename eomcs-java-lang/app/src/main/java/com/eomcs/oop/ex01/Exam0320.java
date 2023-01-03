@@ -18,10 +18,12 @@ public class Exam0320 {
 
     // 인스턴스를 만들어 그 주소를 레퍼런스에 저장한다.
     s1 = new Score();
-
+    s1.name = "홍";
+    System.out.println(s1.name);
     // 새 인스턴스를 만들어 s1에 주소를 저장한다.
     s1 = new Score();
-
+    //    s1.name = "임";
+    System.out.println(s1.kor);
     // 그러면 기존에 들어 있던 주소는 잃어 버린다.
     // 주소를 잃어버려 사용할 수 없는 메모리를
     // "가비지(garbage)"라 부른다.
