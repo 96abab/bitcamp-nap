@@ -15,7 +15,7 @@ eclipse {
 
     // => eclipse 프로젝트 이름 설정하기
     project {
-        name = "myapp04"
+        name = "myapp"
     }
 
     // => eclipse IDE 설정하기
@@ -36,5 +36,5 @@ dependencies {
 }
 
 application {
-    mainClass = 'bitcamp.myapp.App04'
+    mainClass = 'bitcamp.myapp.App'
 }

@@ -6,7 +6,6 @@ public class MemberHandler {
 
   static final int SIZE = 100;
   static int count = 0;
-
   // 레퍼런스 배열 준비
   static Member[] members = new Member[SIZE];
 
@@ -23,8 +22,6 @@ public class MemberHandler {
     m.level = (byte) Prompt.inputInt("0. 비전공자\n1. 준전공자\n2. 전공자\n전공? ");
     m.createdDate = new Date(System.currentTimeMillis()).toString();
 
-    // 지금 금방 만든 객체에 사용자가 입력한 값을 저장한 후
-    // 그 객체의 주소를 잃어버리지 않게 레퍼런스 배열에 보관해 둔다.
     members[count++] = m;
   }
 
@@ -47,24 +44,25 @@ public class MemberHandler {
               levelTitle);
     }
   }
+
   static void service() {
     while (true) {
-      System.out.println("[회원정보]");
+      System.out.println("[회원 관리]");
       System.out.println("1. 등록");
       System.out.println("2. 목록");
       System.out.println("3. 조회");
       System.out.println("4. 변경");
       System.out.println("5. 삭제");
-      System.out.println("0. 이전");
+      System.out.println(" . 이전");
       int menuNo2 = Prompt.inputInt("회원관리>");
-
+  
       if (menuNo2 == 0) {
         break;
       }else if (menuNo2 == 1) {
         inputMember();
       }else if (menuNo2 == 2) {
         printMembers();
-      }else if (menuNo2 >= 3 && menuNo2 <= 5) {
+      }else if(menuNo2 >= 3 && menuNo2 <= 5) {
         System.out.println("작업실행");
       }else {
         System.out.println("잘못된 메뉴 번호 입니다");

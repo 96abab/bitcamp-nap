@@ -24,13 +24,13 @@ package com.eomcs.oop.ex02;
 //     => (default): 같은 패키지의 멤버는 접근 가능
 //     => private: 접근 불가! 그 멤버가 속한 클래스의 내부에서만 접근 가능
 
-import com.eomcs.oop.ex02.domain.Score;
+import com.eomcs.oop.ex02.domain.Score1;
 
 public class Exam0170 {
 
   public static void main(String[] args) {
 
-    Score s1 = new Score();
+    Score1 s1 = new Score1();
 
     s1.name = "홍길동";
     s1.kor = 100;
@@ -39,7 +39,7 @@ public class Exam0170 {
     s1.compute();
     printScore(s1);
 
-    Score s2 = new Score();
+    Score1 s2 = new Score1();
     s2.name = "임꺽정";
     s2.kor = 90;
     s2.eng = 80;
@@ -47,7 +47,7 @@ public class Exam0170 {
     s2.compute();
     printScore(s2);
 
-    Score s3 = new Score();
+    Score1 s3 = new Score1();
     s3.name = "유관순";
     s3.kor = 80;
     s3.eng = 70;
@@ -56,7 +56,7 @@ public class Exam0170 {
     printScore(s3);
   }
 
-  static void printScore(Score s) {
+  static void printScore(Score1 s) {
     System.out.printf("%s: %d, %d, %d, %d, %.1f\n", 
         s.name, s.kor, s.eng, s.math, s.sum, s.aver);
   }
