@@ -17,10 +17,13 @@ public class App {
     MemberHandler supportedMemberHandler = new MemberHandler("국비지원학생");
     // 위탁 학생 목록 저장
     MemberHandler companyMemberHandler = new MemberHandler("위탁교육생");
+    // 학생들 게시글 목록 저장
+    BoardHandler studentBoardHandler = new BoardHandler("게시글 관리");
     while (true) {
       System.out.println("1. 일반학생관리");
       System.out.println("2. 국비지원학생관리");
       System.out.println("3. 위탁생관리");
+      System.out.println("4. 게시글 관리");
       System.out.println("9. 종료");
       int menuNo = Prompt.inputInt("메뉴> ");
 
@@ -30,6 +33,8 @@ public class App {
         supportedMemberHandler.service();
       }else if (menuNo == 3) {
         companyMemberHandler.service();
+      }else if (menuNo == 4) {
+        studentBoardHandler.service();
       } else if (menuNo == 9) {
         break;
       } else {
