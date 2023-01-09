@@ -1,5 +1,9 @@
 package bitcamp.myapp;
 
+import bitcamp.myapp.handler.BoardHandler;
+import bitcamp.myapp.handler.MemberHandler;
+import bitcamp.util.Prompt;
+
 public class App {
 
   public static void main(String[] args) {
@@ -11,30 +15,38 @@ public class App {
   } // main()
 
   private static void goMainMenu() {
-    // 일반학생 목록을 저장
+    // 일반 학생 목록을 저장할 메모리를 준비한다.
     MemberHandler generalMemberHandler = new MemberHandler("일반학생");
-    // 국비 학생 목록 저장
+
+    // 국비지원 학생 목록을 저장할 메모리를 준비한다.
     MemberHandler supportedMemberHandler = new MemberHandler("국비지원학생");
-    // 위탁 학생 목록 저장
+
+    // 기업 위탁 교육생 목록을 저장할 메모리를 준비한다.
     MemberHandler companyMemberHandler = new MemberHandler("위탁교육생");
-    // 학생들 게시글 목록 저장
-    BoardHandler studentBoardHandler = new BoardHandler("게시글 관리");
+
+    // 게시글 목록을 저장할 메모리를 준비한다.
+    BoardHandler boardHandler = new BoardHandler("게시판");
+
     while (true) {
       System.out.println("1. 일반학생관리");
       System.out.println("2. 국비지원학생관리");
-      System.out.println("3. 위탁생관리");
-      System.out.println("4. 게시글 관리");
+      System.out.println("3. 위탁교육생관리");
+      System.out.println("4. 게시판");
       System.out.println("9. 종료");
       int menuNo = Prompt.inputInt("메뉴> ");
 
       if (menuNo == 1) {
         generalMemberHandler.service();
-      }else if (menuNo == 2) {
+
+      } else if (menuNo == 2) {
         supportedMemberHandler.service();
-      }else if (menuNo == 3) {
+
+      } else if (menuNo == 3) {
         companyMemberHandler.service();
-      }else if (menuNo == 4) {
-        studentBoardHandler.service();
+
+      } else if (menuNo == 4) {
+        boardHandler.service();
+
       } else if (menuNo == 9) {
         break;
       } else {
