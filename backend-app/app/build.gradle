@@ -1,24 +1,22 @@
 // Gradle 도구의 기능을 확장하는 설정
 plugins {
-    //Eclipse IDE 관련 기능을 추가한다
+    // Eclipse IDE 관련 기능을 추가한다.
     id 'eclipse'
 
-    // Gradle 에서 자바 애플리케이션을 실행시킬 수 있도록 기능을 추가한다
-    id 'application'  // 'java 플러그인 포함'
+    // Gradle 에서 자바 애플리케이션을 실행시킬 수 있도록 기능을 추가한다.
+    id 'application' // 'java 플러그인 포함'
 
-    // id 'application' 하면 자동 포함
     //id 'java'
 
-    // Gradle 에서 스프링부트를 사용할 수 있게 기능을 추가한다 
+    // Gradle 에서 스프링부트를 다룰 수 있도록 기능을 추가한다.
     id 'org.springframework.boot' version '3.0.1'
 
-    // Gradle에서 스프링부트 의존 라이브러리를 다룰 수 있도록 기능을 추가한다
+    // Gradle 에서 스프링부트 의존 라이브러리를 다룰 수 있도록 기능을 추가한다.
     id 'io.spring.dependency-management' version '1.1.0'
-
 }
 
-//자바 플러그인 설정
-
+// 'java' 플러그인 설정:
+// => 자바 소스를 컴파일 할 때 적용할 옵션
 tasks.withType(JavaCompile) {
     // 프로젝트의 소스 파일 인코딩을 gradle에게 알려준다.
     // $javac -encoding UTF-8 ..
@@ -32,10 +30,10 @@ tasks.withType(JavaCompile) {
 }
 
 eclipse {
-    project {       
+    project {
         name = "backend-app"
     }
-    jdt {       
+    jdt {  
       sourceCompatibility = 17
       targetCompatibility = 17
       javaRuntimeName = "JavaSE-17"
@@ -47,36 +45,35 @@ tasks.named('test') {
   useJUnitPlatform()
 }
 
-// => 배포파일 (.jar,.zip 등) 을 만들때 사용할 이름 설정
-group = 'bitcamp'  
+// => 배포 파일(.jar, .zip 등)을 만들 때 사용할 이름 설정
+group = 'bitcamp' 
 version = '0.0.1-SNAPSHOT'
 
 
-// => Spring Configration processor 를 다룰 때 필요한 설정 정보
-
+// => Spring Configuration Processor 를 다룰 때 필요한 설정 정보
 configurations {
   compileOnly {
     extendsFrom annotationProcessor
   }
 }
 
-
-// 의존 라이브러리가 없로드 되어있는 서버 정보
-// gradle은 서버에서 라이브러리 파일을 다운로드 할 것이다 
+// 의존 라이브러리가 업로드 되어 있는 서버 정보
+// Gradle은 이 서버에서 라이브러리 파일을 다운로드 할 것이다.
 repositories {
-    mavenCentral() //https://repo.maven.apache.org/maven2/
+    mavenCentral() // https://repo.maven.apache.org/maven2/
 }
 
 // 애플리케이션에서 사용하는 외부 라이브러리 정보
 dependencies {
+   
     // Spring Boot 기본 라이브러리
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    
+
     // 개발하는 동안 사용하는 라이브러리
-    // 배보파일을 만들때 제외된다
+    // 배포 파일을 만들 때 제외된다.
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     
-    // Spring Boot 관련 애노테이션 처리 라이브러리
+    // 스프링부트 관련 애노테이션 처리 라이브러리
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     
     // 단위테스트 할 때 사용하는 라이브러리
@@ -85,13 +82,12 @@ dependencies {
     
     // 일반 용도의 유틸리티 라이브러리
     implementation 'com.google.guava:guava:31.1-jre'
+
 }
 
-// 'application' 플러그인 설정
-// run 명령으로 실행시킬 자바 클레스 이름
-
+// 'application' 플러그인 설정:
+// => run 명령으로 실행시킬 자바 클래스 이름
 application {
     mainClass = 'bitcamp.bootapp.App'
 }
-
 
