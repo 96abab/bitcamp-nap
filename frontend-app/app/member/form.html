@@ -12,17 +12,42 @@
 <table border="1">
   <tbody>
     <tr>
-      <th>제목</th>
-      <td><input type="text" name="title" id="f-title"></td>
+      <th>이름</th>
+      <td><input type="text" name="name" id="f-name"></td>
     </tr>
     <tr>
-      <th>내용</th>
-      <td><textarea name="content" rows="10" cols="50" id="f-content"></textarea></td>
+      <th>전화</th>
+      <td><input type="text" name="tel" id="f-tel"></td>
+    </tr>
+    <tr>
+      <th>우편번호</th>
+      <td><input type="text" name="postno" id="f-postno"></td>
+    </tr>
+    <tr>
+      <th>기본주소</th>
+      <td><input type="text" name="basicaddress" id="f-basicaddress"></td>
+    </tr>
+    <tr>
+      <th>상세주소</th>
+      <td><input type="text" name="detailaddress" id="f-detailaddress"></td>
+    </tr>
+    <tr>
+      <th>재직여부</th>
+      <td><input type="text" name="working" id="f-working"></td>
+    </tr>
+    <tr>
+      <th>성별</th>
+      <td><input type="text" name="gender" id="f-gender"></td>
+    </tr>
+    <tr>
+      <th>전공</th>
+      <td><input type="text" name="level" id="f-level"></td>
     </tr>
     <tr>
       <th>암호</th>
       <td><input type="password" name="password" id="f-password"></td>
     </tr>
+
   </tbody>
 </table>
 <button id="add-btn" type="button">등록</button>
@@ -31,17 +56,23 @@
 
 <script>
 document.querySelector('#add-btn').onclick = (e) => {
-  var title = encodeURIComponent(document.querySelector('#f-title').value);
-  var content = encodeURIComponent(document.querySelector('#f-content').value);
-  var password = document.querySelector('#f-password').value;
+  var name = encodeURIComponent(document.querySelector('#f-name').value);
+  var tel = encodeURIComponent(document.querySelector('#f-tel').value);
+  var postno = encodeURIComponent(document.querySelector('#f-postno').value);
+  var basicaddress = encodeURIComponent(document.querySelector('#f-basicaddress').value);
+  var detailaddress = encodeURIComponent(document.querySelector('#f-detailaddress').value);
+  var working = encodeURIComponent(document.querySelector('#f-working').value);
+  var gender = encodeURIComponent(document.querySelector('#f-gender').value);
+  var level = encodeURIComponent(document.querySelector('#f-level').value);
+  var password = encodeURIComponent(document.querySelector('#f-password').value);
 
   // console.log(`title=${title}&content=${content}&password=${password}`);
-  fetch('http://localhost:8080/boards', {
+  fetch('http://localhost:8080/members', {
     method: 'POST',
     headers: {
       'Content-type': 'application/x-www-form-urlencoded'
     },
-    body: `title=${title}&content=${content}&password=${password}`
+    body: `name=${name}&tel=${tel}&postNo=${postno}$basicAddress=${basicaddress}&detailAddress=${detailaddress}&working=${working}&gender=${gender}&level=${level}$password=${password}`
   })
   .then((response) => {return response.json();})
   .then((obj) => {

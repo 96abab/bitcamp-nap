@@ -11,6 +11,15 @@ public class Member {
   private boolean working;
   private  char gender;
   private byte level;
+  private String password;
+
+
+  public String getPassword() {
+    return password;
+  }
+  public void setPassword(String password) {
+    this.password = password;
+  }
   private String createdDate;
 
   public int getNo() {
