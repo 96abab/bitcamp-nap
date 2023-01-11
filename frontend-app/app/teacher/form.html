@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<h1>강사 등록</h1>
+<form>
+<table border="1">
+  <tbody>
+    <tr>
+      <th>이름</th>
+      <td><input type="text" name="name" id="f-name"></td>
+    </tr>
+    <tr>
+      <th>전화</th>
+      <td><input type="text" name="tel" id="f-tel"></td>
+    </tr>
+    <tr>
+      <th>이메일</th>
+      <td><input type="text" name="eMail" id="f-eMail"></td>
+    </tr>
+    <tr>
+      <th>학력</th>
+      <td><input type="text" name="eduCation" id="f-eduCation"></td>
+    </tr>
+    <tr>
+      <th>대학</th>
+      <td><input type="text" name="uniVerSity" id="f-uniVerSity"></td>
+    </tr>
+    <tr>
+      <th>전공</th>
+      <td><input type="text" name="marJoIn" id="f-marJoIn"></td>
+    </tr>
+    <tr>
+      <th>수업료</th>
+      <td><input type="text" name="pay" id="f-pay"></td>
+    </tr>
+    </tr>
+
+  </tbody>
+</table>
+<button id="add-btn" type="button">등록</button>
+<button id="cancel-btn" type="button">취소</button>
+</form>
+
+<script>
+document.querySelector('#add-btn').onclick = (e) => {
+  var name = encodeURIComponent(document.querySelector('#f-name').value);
+  var tel = document.querySelector('#f-tel').value;
+  var eMail = document.querySelector('#f-eMail').value;
+  var eduCation = encodeURIComponent(document.querySelector('#f-eduCation').value);
+  var uniVerSity = encodeURIComponent(document.querySelector('#f-uniVerSity').value);
+  var marJoIn = document.querySelector('#f-marJoIn').value;
+  var pay = document.querySelector('#f-pay').value;
+  // console.log(`name=${name}&tel=${tel}&eMail=${eMail}&eduCation=${eduCation}&uniVerSity=${uniVerSity}&marJoIn=${marJoIn}&pay=${pay}`);
+
+  fetch('http://localhost:8080/teachers', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/x-www-form-urlencoded'
+    },
+    body: `name=${name}&tel=${tel}&eMail=${eMail}&eduCation=${eduCation}&uniVerSity=${uniVerSity}&marJoIn=${marJoIn}&pay=${pay}`
+  })
+  .then((response) => {return response.json();})
+  .then((obj) => {
+    location.href = "list.html";
+  })
+  .catch((err) => {
+    alert("서버 요청 오류!");
+    console.log(err);
+  });
+};
+
+document.querySelector('#cancel-btn').onclick = (e) => {
+  location.href = "list.html";
+};
+</script>
+</body>
+</html>

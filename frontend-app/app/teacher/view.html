@@ -7,7 +7,7 @@
   <title>Document</title>
 </head>
 <body>
-<h1>게시글</h1>
+<h1>강사정보</h1>
 <form>
 <table border="1">
   <tbody>
@@ -16,24 +16,36 @@
       <td><input type="text" name="no" id="f-no" readonly></td>
     </tr>
     <tr>
-      <th>제목</th>
-      <td><input type="text" name="title" id="f-title"></td>
+      <th>이름</th>
+      <td><input type="text" name="name" id="f-name"></td>
     </tr>
     <tr>
-      <th>내용</th>
-      <td><textarea name="content" rows="10" cols="50" id="f-content"></textarea></td>
+      <th>전화</th>
+      <td><input type="text" name="tel" id="f-tel"></td>
     </tr>
     <tr>
-      <th>암호</th>
-      <td><input type="password" name="password" id="f-password"></td>
+      <th>이메일</th>
+      <td><input type="text" name="eMail" id="f-eMail"></td>
+    </tr>
+    <tr>
+      <th>학력</th>
+      <td><input type="text" name="eduCation" id="f-eduCation"></td>
+    </tr>
+    <tr>
+      <th>대학</th>
+      <td><input type="text" name="uniVerSity" id="f-uniVerSity"></td>
+    </tr>
+    <tr>
+      <th>전공</th>
+      <td><input type="text" name="marJoIn" id="f-marJoIn"></td>
+    </tr>
+    <tr>
+      <th>수업료</th>
+      <td><input type="text" name="pay" id="f-pay"></td>
     </tr>
     <tr>
       <th>작성일</th>
-      <td><span id="f-createddate"></span></td>
-    </tr>
-    <tr>
-      <th>조회수</th>
-      <td><span id="f-viewcount"></span></td>
+      <td><span id="f-createdDate"></span></td>
     </tr>
   </tbody>
 </table>
@@ -44,18 +56,12 @@
 
 <script>
 
-// location.href --> http://localhost:5500/bitcamp-ncp-teacher/frontend-app/app/board/view.html?no=20
-// values[0] --> "http://localhost:5500/bitcamp-ncp-teacher/frontend-app/app/board/view.html"
-// values[1] --> "no=20"
 var values = location.href.split('?');
 if (values.length != 2) {
   alert("옳바른 페이지 주소가 아닙니다.");
   throw "no 파라미터 값이 누락되었습니다.";
 } 
 
-// values[1] --> "no=20"
-// values2[0] --> "no"
-// values2[1] --> "20"
 var values2 = values[1].split("=");
 if (values2.length != 2 || values2[0] != "no") {
   alert("옳바른 페이지 주소가 아닙니다.");
@@ -64,11 +70,11 @@ if (values2.length != 2 || values2[0] != "no") {
 
 var no = parseInt(values2[1]);
 if (isNaN(no)) {
-  alert("회원 번호가 옳지 않습니다.");
+  alert("강사가 옳지 않습니다.");
   throw "no 파라미터 값이 숫자가 아닙니다.";
 }
 
-fetch(`http://localhost:8080/boards/${no}`)
+fetch(`http://localhost:8080/teachers/${no}`)
   .then((response) => response.json())
   .then((obj) => {
     if (obj.status == "failure") {
@@ -76,11 +82,17 @@ fetch(`http://localhost:8080/boards/${no}`)
       console.log(obj.data);
       return;
     }
+ 
     document.querySelector("#f-no").value = obj.data.no;
-    document.querySelector("#f-title").value = obj.data.title;
-    document.querySelector("#f-content").value = obj.data.content;
-    document.querySelector("#f-createddate").innerHTML = obj.data.createdDate;
-    document.querySelector("#f-viewcount").innerHTML = obj.data.viewCount;
+    document.querySelector("#f-name").value = obj.data.name;
+    document.querySelector("#f-tel").value = obj.data.tel;
+    document.querySelector("#f-eMail").value = obj.data.eMail;
+    document.querySelector("#f-eduCation").value = obj.data.eduCation;
+    document.querySelector("#f-uniVerSity").value = obj.data.uniVerSity;
+    document.querySelector("#f-marJoIn").value = obj.data.marJoIn;
+    document.querySelector("#f-pay").value = obj.data.pay;
+    document.querySelector("#f-createdDate").innerHTML = obj.data.createdDate;
+    
   })
   .catch((err) => {
     alert("서버 요청 오류!");
@@ -88,21 +100,25 @@ fetch(`http://localhost:8080/boards/${no}`)
   });
 
 document.querySelector('#update-btn').onclick = (e) => {
-  var title = encodeURIComponent(document.querySelector('#f-title').value);
-  var content = encodeURIComponent(document.querySelector('#f-content').value);
-  var password = document.querySelector('#f-password').value;
+  var name = encodeURIComponent(document.querySelector('#f-name').value);
+  var tel = document.querySelector('#f-tel').value;
+  var eMail = document.querySelector('#f-eMail').value;
+  var eduCation = encodeURIComponent(document.querySelector('#f-eduCation').value);
+  var uniVerSity = encodeURIComponent(document.querySelector('#f-uniVerSity').value);
+  var marJoIn = document.querySelector('#f-marJoIn').value;
+  var pay = document.querySelector('#f-pay').value;
 
-  fetch(`http://localhost:8080/boards/${no}`, {
+  fetch(`http://localhost:8080/teachers/${no}`, {
     method: 'PUT',
     headers: {
       'Content-type': 'application/x-www-form-urlencoded'
     },
-    body: `title=${title}&content=${content}&password=${password}`
+    body: `name=${name}&tel=${tel}&eMail=${eMail}&eduCation=${eduCation}&uniVerSity=${uniVerSity}&marJoIn=${marJoIn}&pay=${pay}`
   })
   .then((response) => response.json())
   .then((obj) => {
     if (obj.status == "failure") {
-      alert("게시글 변경 오류!\n" + obj.data);
+      alert("강사정보 변경 오류!\n" + obj.data);
       return;
     }
 
@@ -117,19 +133,14 @@ document.querySelector('#update-btn').onclick = (e) => {
 };
 
 document.querySelector('#delete-btn').onclick = (e) => {
-  var password = prompt('암호를 입력하세요!');
 
-  fetch(`http://localhost:8080/boards/${no}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-type': 'application/x-www-form-urlencoded'
-    },
-    body: `password=${password}`
+  fetch(`http://localhost:8080/teachers/${no}`, {
+    method: 'DELETE'
   })
   .then((response) => response.json())
   .then((obj) => {
     if (obj.status == "failure") {
-      alert("게시글 삭제 오류!\n" + obj.data);
+      alert("회원 삭제 오류!\n" + obj.data);
       return;
     }
 
