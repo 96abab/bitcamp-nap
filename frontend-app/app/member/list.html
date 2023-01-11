@@ -15,11 +15,7 @@
       <th>번호</th>
       <th>이름</th>
       <th>전화</th>
-      <th>우편번호</th>
-      <th>기본주소</th>
-      <th>상세주소</th>
-      <th>재직여부</th>
-      <th>성별</th>
+      <th>재직</th>
       <th>전공</th>
     </tr>
   </thead>
@@ -30,6 +26,15 @@
 <script>
 var tbody = document.querySelector("tbody");
 
+function getLevelTitle(level) {
+  switch (level) {
+    case 0: return "비전공자";
+    case 1: return "준전공자";
+    case 2: return "전공자";
+    default: return "";
+  }
+}
+
 fetch('http://localhost:8080/members')
   .then((response) => {return response.json();})
   .then((obj) => {
@@ -39,12 +44,8 @@ fetch('http://localhost:8080/members')
         <td>${m.no}</td>
         <td><a href="view.html?no=${m.no}">${m.name} </a></td>
         <td>${m.tel}</td>
-        <td>${m.postNo}</td>
-        <td>${m.basicAddress}</td>
-        <td>${m.detailAddress}</td>
-        <td>${m.working}</td>
-        <td>${m.gender}</td>
-        <td>${m.level}</td>
+        <td>${m.working ? "예" : "아니오"}</td>
+        <td>${getLevelTitle(m.level)}</td>
         </tr>\n`;
     }
     tbody.innerHTML = html;
