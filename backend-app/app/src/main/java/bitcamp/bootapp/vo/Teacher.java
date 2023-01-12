@@ -1,72 +1,43 @@
 package bitcamp.bootapp.vo;
 
-// 회원 데이터를 담을 메모리를 설계한다.
-public class Teacher {
-  private int no;
-  private String name;
-  private String tel;
-  private String eMail;
-  private String eduCation;
-  private String uniVerSity;
-  private String marJoIn;
-  private int pay;
-  private String createdDate;
+public class Teacher extends Member {
+  // Member 클래스의 코드를 사용하겠다고 선언한다.
 
+  private String email;
+  private int degree;
+  private String school;
+  private String major;
+  private int wage;
 
-  public String geteMail() {
-    return eMail;
+  public String getEmail() {
+    return email;
   }
-  public void seteMail(String eMail) {
-    this.eMail = eMail;
+  public void setEmail(String email) {
+    this.email = email;
   }
-  public String getEduCation() {
-    return eduCation;
+  public int getDegree() {
+    return degree;
   }
-  public void setEduCation(String eduCation) {
-    this.eduCation = eduCation;
+  public void setDegree(int degree) {
+    this.degree = degree;
   }
-  public String getUniVerSity() {
-    return uniVerSity;
+  public String getSchool() {
+    return school;
   }
-  public void setUniVerSity(String uniVerSity) {
-    this.uniVerSity = uniVerSity;
+  public void setSchool(String school) {
+    this.school = school;
   }
-  public String getMarJoIn() {
-    return marJoIn;
+  public String getMajor() {
+    return major;
   }
-  public void setMarJoIn(String marJoIn) {
-    this.marJoIn = marJoIn;
+  public void setMajor(String major) {
+    this.major = major;
   }
-  public int getPay() {
-    return pay;
+  public int getWage() {
+    return wage;
   }
-  public void setPay(int pay) {
-    this.pay = pay;
+  public void setWage(int wage) {
+    this.wage = wage;
   }
-  public int getNo() {
-    return no;
-  }
-  public void setNo(int no) {
-    this.no = no;
-  }
-  public String getName() {
-    return name;
-  }
-  public void setName(String name) {
-    this.name = name;
-  }
-  public String getTel() {
-    return tel;
-  }
-  public void setTel(String tel) {
-    this.tel = tel;
-  }
-  public String getCreatedDate() {
-    return createdDate;
-  }
-  public void setCreatedDate(String createdDate) {
-    this.createdDate = createdDate;
-  }
-
 
 }

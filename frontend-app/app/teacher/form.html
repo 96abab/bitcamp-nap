@@ -7,7 +7,7 @@
   <title>Document</title>
 </head>
 <body>
-<h1>강사 등록</h1>
+<h1>새 강사</h1>
 <form>
 <table border="1">
   <tbody>
@@ -17,30 +17,37 @@
     </tr>
     <tr>
       <th>전화</th>
-      <td><input type="text" name="tel" id="f-tel"></td>
+      <td><input type="tel" name="tel" id="f-tel"></td>
     </tr>
     <tr>
       <th>이메일</th>
-      <td><input type="text" name="eMail" id="f-eMail"></td>
+      <td><input type="email" name="email" id="f-email"></td>
     </tr>
     <tr>
-      <th>학력</th>
-      <td><input type="text" name="eduCation" id="f-eduCation"></td>
+      <th>학위</th>
+      <td>
+        <select name="degree" id="f-degree">
+          <option value="1">고졸</option>
+          <option value="2">전문학사</option>
+          <option value="3" selected>학사</option>
+          <option value="4">석사</option>
+          <option value="5">박사</option>
+          <option value="0">기타</option>
+        </select>
+      </td>
     </tr>
     <tr>
-      <th>대학</th>
-      <td><input type="text" name="uniVerSity" id="f-uniVerSity"></td>
+      <th>학교</th>
+      <td><input type="text" name="school" id="f-school"></td>
     </tr>
     <tr>
       <th>전공</th>
-      <td><input type="text" name="marJoIn" id="f-marJoIn"></td>
+      <td><input type="text" name="major" id="f-major"></td>
     </tr>
     <tr>
-      <th>수업료</th>
-      <td><input type="text" name="pay" id="f-pay"></td>
+      <th>강의료</th>
+      <td><input type="number" name="wage" id="f-wage">원/시간</td>
     </tr>
-    </tr>
-
   </tbody>
 </table>
 <button id="add-btn" type="button">등록</button>
@@ -51,19 +58,22 @@
 document.querySelector('#add-btn').onclick = (e) => {
   var name = encodeURIComponent(document.querySelector('#f-name').value);
   var tel = document.querySelector('#f-tel').value;
-  var eMail = document.querySelector('#f-eMail').value;
-  var eduCation = encodeURIComponent(document.querySelector('#f-eduCation').value);
-  var uniVerSity = encodeURIComponent(document.querySelector('#f-uniVerSity').value);
-  var marJoIn = document.querySelector('#f-marJoIn').value;
-  var pay = document.querySelector('#f-pay').value;
-  // console.log(`name=${name}&tel=${tel}&eMail=${eMail}&eduCation=${eduCation}&uniVerSity=${uniVerSity}&marJoIn=${marJoIn}&pay=${pay}`);
+  var email = document.querySelector('#f-email').value;
+  var degree = document.querySelector('#f-degree').value;
+  var school = encodeURIComponent(document.querySelector('#f-school').value);
+  var major = encodeURIComponent(document.querySelector('#f-major').value);;
+  var wage = document.querySelector('#f-wage').value;
+
+  // console.log(`name=${name}&tel=${tel}&email=${email}&degree=${degree}&school=${school}` +
+  //   `&major=${major}&wage=${wage}`);
 
   fetch('http://localhost:8080/teachers', {
     method: 'POST',
     headers: {
       'Content-type': 'application/x-www-form-urlencoded'
     },
-    body: `name=${name}&tel=${tel}&eMail=${eMail}&eduCation=${eduCation}&uniVerSity=${uniVerSity}&marJoIn=${marJoIn}&pay=${pay}`
+    body: `name=${name}&tel=${tel}&email=${email}&degree=${degree}&school=${school}` +
+      `&major=${major}&wage=${wage}`
   })
   .then((response) => {return response.json();})
   .then((obj) => {
@@ -78,6 +88,7 @@ document.querySelector('#add-btn').onclick = (e) => {
 document.querySelector('#cancel-btn').onclick = (e) => {
   location.href = "list.html";
 };
+
 </script>
 </body>
 </html>

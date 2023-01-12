@@ -3,7 +3,6 @@ package bitcamp.bootapp.controller;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,11 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 import bitcamp.bootapp.dao.BoardDao;
 import bitcamp.bootapp.vo.Board;
 
-@CrossOrigin(origins = {"http://127.0.0.1:5500", "http://localhost:5500"})
 @RestController
 public class BoardController {
 
   BoardDao boardDao = new BoardDao();
+
+  public BoardController(BoardDao boardDao) {
+    this.boardDao = boardDao;
+  }
 
   @PostMapping("/boards")
   public Object addBoard(
@@ -80,13 +82,15 @@ public class BoardController {
       @RequestParam(required = false) String content,
       @RequestParam(required = false) String password) {
 
-    Board old = this.boardDao.findByNo(boardNo);
     Map<String,Object> contentMap = new HashMap<>();
+
+    Board old = this.boardDao.findByNo(boardNo);
     if (old == null || !old.getPassword().equals(password)) {
       contentMap.put("status", "failure");
-      contentMap.put("data", "게시글이 없거나 암호가 맞지 없습니다.");
+      contentMap.put("data", "게시글이 없거나 암호가 맞지 않습니다.");
       return contentMap;
     }
+
     Board b = new Board();
     b.setNo(boardNo);
     b.setTitle(title);
@@ -105,15 +109,16 @@ public class BoardController {
   @DeleteMapping("/boards/{boardNo}")
   public Object deleteBoard(
       @PathVariable int boardNo,
-      @RequestParam (required = false) String password) {
+      @RequestParam(required = false) String password) {
 
     Board b = this.boardDao.findByNo(boardNo);
 
+    // 응답 결과를 담을 맵 객체 준비
     Map<String,Object> contentMap = new HashMap<>();
 
     if (b == null || !b.getPassword().equals(password)) {
       contentMap.put("status", "failure");
-      contentMap.put("data", "해당 번호의 게시글이 없습니다.");
+      contentMap.put("data", "게시글이 없거나 암호가 맞지 않습니다.");
 
     } else {
       this.boardDao.delete(b);
@@ -122,5 +127,4 @@ public class BoardController {
 
     return contentMap;
   }
-
 }
