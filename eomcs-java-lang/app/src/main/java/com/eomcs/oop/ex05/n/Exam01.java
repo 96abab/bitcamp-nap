@@ -9,10 +9,16 @@ package com.eomcs.oop.ex05.n;
 // "추상메서드(abstract method)"이다.
 //
 public class Exam01 {
-
+  int a;
+  int b;
+  int c;
   public static void main(String[] args) {
     Sedan car1 = new Sedan();
     car1.run();
+  }
+  Exam01()  {
+    a = 10;
+  System.out.println(a);
   }
 
 }
