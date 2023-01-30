@@ -1,12 +1,13 @@
 package bitcamp.myapp.handler;
 
+import java.util.ArrayList;
 import bitcamp.myapp.dao.TeacherDao;
 import bitcamp.myapp.vo.Teacher;
 import bitcamp.util.Prompt;
 
 public class TeacherHandler {
 
-  private TeacherDao teacherDao = new TeacherDao();
+  private TeacherDao teacherDao = new TeacherDao(new ArrayList<Teacher>());
   private String title;
 
   public TeacherHandler(String title) {
@@ -128,6 +129,9 @@ public class TeacherHandler {
   }
 
   public void service() {
+
+    teacherDao.load("teacher.data");
+
     while (true) {
       System.out.printf("[%s]\n", this.title);
       System.out.println("1. 등록");
@@ -139,7 +143,9 @@ public class TeacherHandler {
       int menuNo = Prompt.inputInt(String.format("%s> ", this.title));
 
       switch (menuNo) {
-        case 0: return;
+        case 0:
+          teacherDao.save("teacher.data");
+          return;
         case 1: this.inputTeacher(); break;
         case 2: this.printTeachers(); break;
         case 3: this.printTeacher(); break;

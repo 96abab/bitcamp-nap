@@ -25,11 +25,11 @@ public class Exam0851 {
     // 필드 초기화 문장(variable initializer)
     int a = 100;
 
+    // 인스턴스 초기화 블록(initializer block)
     {
       a = 111;
       System.out.println("초기화 블록 실행");
     }
-    // 인스턴스 초기화 블록(initializer block)
   }
 
   public static void main(String[] args) {

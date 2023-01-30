@@ -51,7 +51,10 @@ public class Exam0140 {
 
     Member m1 = new Member("홍길동", 20);
     Member m2 = new Member("임꺽정", 30);
-    Member m3 = new Member("유관순", 17);
+    Member m3 = new Member("홍길동", 20);
+    Member m4 = new Member("유관순", 17);
+    Member m5 = new Member("유관순", 17);
+    Member m6 = new Member("유관순", 17);
 
     ArrayList<Member> list = new ArrayList<>();
     list.add(m1);
@@ -64,8 +67,7 @@ public class Exam0140 {
     // - 값을 비교할 때는 contains()와 마찬가지로
     //   equals()의 리턴 값이 true인 경우 같은 값으로 간주한다.
     //
-    Member m4 = new Member("유관순", 17);
-    System.out.println(list.indexOf(m4)); // 2
+    System.out.println(list.indexOf(m5)); // 2
 
     System.out.println(m3 == m4);
     System.out.println(m3.equals(m4));

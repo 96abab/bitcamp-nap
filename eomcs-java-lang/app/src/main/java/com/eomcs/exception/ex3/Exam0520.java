@@ -21,7 +21,7 @@ public class Exam0520 {
     try {
       System.out.println("try");
       m(0);
-      System.out.println("try 블록 실행");
+      System.out.println("try 블록 실행 완료!");
       // m()에서 발생된 예외는
       // try 블록에서 받지 않는다.
       // 따라서 main() 호출자에게 위임한다.

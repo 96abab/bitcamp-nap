@@ -16,7 +16,7 @@ public class Exam0321 {
     test(new Calculator() {
       @Override
       public int compute(int a, int b) {
-        return a + b;
+        return a * b;
       }
     });
   }

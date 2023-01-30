@@ -13,7 +13,7 @@ public class Exam0141 {
       // 같은 문자열에 대해 같은 해시값을 리턴한다.
       // 이 능력을 이용하여 My 클래스의 인스턴스 해시값을 계산해보자.
       //
-      String str = String.format("%s%d", this.name, this.age);
+      String str = String.format("%s,%d", this.name, this.age);
       return str.hashCode();
     }
   }

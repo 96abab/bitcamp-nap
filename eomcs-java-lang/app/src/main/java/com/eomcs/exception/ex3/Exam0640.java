@@ -23,7 +23,7 @@ public class Exam0640 {
 
     try (
         // A 클래스는 AutoCloseable 구현체가 아니기 때문에 여기에 선언할 수 없다.
-        //                A obj = new A(); // 컴파일 오류!
+        //        A obj = new A(); // 컴파일 오류!
 
         // B 클래스에 close() 메서드가 있어도
         // AutoCloseable 구현체가 아니기 때문에 여기에 선언할 수 없다.

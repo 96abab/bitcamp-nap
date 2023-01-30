@@ -39,6 +39,7 @@ public class Exam0510 {
       //
       System.out.println("finally");
     }
+
     System.out.println("안녕히 가세요!");
   }
 

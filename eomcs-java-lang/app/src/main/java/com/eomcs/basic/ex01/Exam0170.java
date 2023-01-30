@@ -30,9 +30,10 @@ public class Exam0170 {
       return "Score [name=" + name + ", kor=" + kor + ", eng=" + eng + ", math=" + math + ", sum="
           + sum + ", aver=" + aver + "]";
     }
+
   }
 
-  public static void main(String[] args) throws {
+  public static void main(String[] args) {
 
     Score s1 = new Score("홍길동", 100, 100, 100);
     System.out.println(s1);
@@ -62,9 +63,11 @@ public class Exam0170 {
     // protected 멤버를 사용할 수 있다.
     Exam0170 obj = new Exam0170();
 
-
-
-    obj.clone(); // 접근 가능! 단, 호출할 때 예외 상황을 처리해야 한다.
+    try {
+      obj.clone(); // 접근 가능! 단, 호출할 때 예외 상황을 처리해야 한다.
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     // 해결책:
     // => Object에서 상속 받은 clone()을 오버라이딩 하라!

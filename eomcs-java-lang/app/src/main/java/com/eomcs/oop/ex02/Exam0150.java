@@ -20,8 +20,8 @@ public class Exam0150 {
     int sum;
     float aver;
 
-    // static method ==> instance method
-    // 클래스 메서드로 연산자를 정의하면,
+    // static method를 instance method로 바꾸는 이유:
+    // - 클래스 메서드로 연산자를 정의하면,
     // - 계산을 수행할 때마다 인스턴스의 주소를 파라미터로 받아야 한다.
     // - 매우 번거롭다.
     //
@@ -32,15 +32,15 @@ public class Exam0150 {
     // - 그래서 자바는 "인스턴스 메서드"라는 것을 제공한다.
     //
 
-    // 인스턴스 메서드
-    // - 메서드가 호출할 때 인스턴스의 주소를 파라미터로 넘기지 않는다.
+    // 인스턴스 메서드 = non-static 메서드
+    // - 메서드를 호출할 때 인스턴스의 주소를 파라미터로 넘기지 않는다.
     // - 메서드를 호출할 때(연산자를 사용할 때), 메서드 앞에 인스턴스 주소를 적는다.
     // - 이렇게 전달된 인스턴스 주소는 메서드에 내장된 this라는 변수에 자동 복사된다.
     // - 그래서 파라미터 대신 this를 사용하면 된다.
     // - 인스턴스 메서드는 static을 붙이지 않는다.
     void compute() {
-      // 인스턴스 메서드를 호출할 때 넘겨준 인스턴스를 주소는
-      // this 라는 내장 변수(built-in)에 보관된다.
+      // 인스턴스 메서드를 호출할 때 넘겨준 인스턴스 주소는
+      // this 라는 내장 변수(built-in)에 자동으로 보관된다.
       this.sum = this.kor + this.eng + this.math;
       this.aver = (float) this.sum / 3;
     }
@@ -55,10 +55,10 @@ public class Exam0150 {
     s1.eng = 90;
     s1.math = 85;
 
-    // 다음은 Score의 값을 다루기 위해 non-instance 메서드를 호출하는 예이다.
-    // => non-instance 메서드 = static 메서드 = 클래스 메서드
+    // 다음은 Score의 값을 다루기 위해 스태틱 메서드를 호출하는 예이다.
+    // => static 메서드 = 클래스 메서드
     //
-    //    Score.calculate(score);
+    //    Score.compute(score);
     //
 
     // 클래스 메서드를 사용할 때 마다 매번 인스턴스의 주소를 파라미터로 넘겨줘야 했다.

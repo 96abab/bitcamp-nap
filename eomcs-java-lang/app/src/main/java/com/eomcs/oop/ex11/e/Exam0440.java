@@ -39,5 +39,13 @@ public class Exam0440 {
       }
     });
 
+
+    m1(new A() {
+      @Override
+      public void print() {
+        System.out.println("하하하");
+      }
+    });
+
   }
 }

@@ -1,12 +1,37 @@
 package bitcamp.myapp.vo;
 
-public class Board {
+import java.util.Objects;
+
+public class Board  {
   private int no;
   private String title;
   private String content;
   private String password;
   private String createdDate;
   private int viewCount;
+
+
+
+  @Override
+  public String toString() {
+    return "Board [no=" + no + ", title=" + title + ", content=" + content + ", password="
+        + password + ", createdDate=" + createdDate + ", viewCount=" + viewCount + "]";
+  }
+  @Override
+  public int hashCode() {
+    return Objects.hash(no);
+  }
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Board other = (Board) obj;
+    return no == other.no;
+  }
 
   public int getNo() {
     return no;

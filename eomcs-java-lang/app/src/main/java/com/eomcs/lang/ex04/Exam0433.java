@@ -16,8 +16,6 @@ public class Exam0433 {
     //- 정수 변수를 사용하면 문자의 코드 값을 받아서 그래도 출력할 수 있다.
     //  println()은 int 변수의 값은 10진수로 출력한다.
     int i = 'A';
-    float a = '똥'-1;
-    System.out.println((char)a);
-
+    System.out.println(i);
   }
 }

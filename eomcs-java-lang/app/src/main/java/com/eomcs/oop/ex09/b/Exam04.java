@@ -32,9 +32,12 @@ class MyInterface4Impl implements MyInterface4 {
   @Override
   public void m1() {
 
-    //    m2();
+    //    m2(); // 현재 클래스의 m2 메서드
 
     // 인터페이스에 선언된 다른 default 메서드를 호출하고 싶다면,
+    // super.m2(); // 수퍼 클래스(Object)에서 m2()를 찾아 올라간다
+    // Object에는 m2()가 없기 때문에 오류
+    // MyInterface4.m2(); // m2()는 인스턴스(non-static) 메서드이기때문에 이름으로 직접 호출 불가
     MyInterface4.super.m2();
 
     System.out.println("MyInterface4Impl.m1()");

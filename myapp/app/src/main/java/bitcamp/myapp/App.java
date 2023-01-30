@@ -25,6 +25,7 @@ public class App {
       System.out.println("2. 강사관리");
       System.out.println("3. 게시판");
       System.out.println("9. 종료");
+
       int menuNo;
       try {
         menuNo = Prompt.inputInt("메뉴> ");
@@ -32,6 +33,7 @@ public class App {
         System.out.println("메뉴 번호가 옳지 않습니다!");
         continue;
       }
+
       try {
         switch (menuNo) {
           case 1: studentHandler.service(); break;

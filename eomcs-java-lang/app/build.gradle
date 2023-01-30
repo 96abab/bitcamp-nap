@@ -12,8 +12,6 @@ plugins {
 }
 
 // 자바 소스를 컴파일 할 때 적용할 옵션
-
-
 tasks.withType(JavaCompile) {
     // 프로젝트의 소스 파일 인코딩을 gradle에게 알려준다.
     // $javac -encoding UTF-8 ..
@@ -25,6 +23,7 @@ tasks.withType(JavaCompile) {
     // 자바 클래스를 실행시킬 JVM의 최소 버전
     targetCompatibility = '17'
 }
+
 
 // .class 파일을 둘 폴더를 지정하지 않으면 
 // Gradle 은 기본 출력 폴더의 경로로 'bin/default' 를 사용한다.
@@ -55,7 +54,6 @@ eclipse {
 */
 
 // eclipse 프로젝트 이름을 설정하기
-
 eclipse {
     project {
         name = "eomcs-java-lang"
@@ -99,13 +97,13 @@ dependencies {
   // implementation 'org.mybatis:mybatis-spring:2.0.6'
 
   // MariaDB JDBC 드라이버
-//   implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.7'
+  //   implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.7'
 
   // Oracle JDBC Driver
-//   implementation 'com.oracle.database.jdbc:ojdbc11-production:21.7.0.0'
+  //   implementation 'com.oracle.database.jdbc:ojdbc11-production:21.7.0.0'
     
   // MSSQL JDBC Driver
-//   implementation 'com.microsoft.sqlserver:mssql-jdbc:11.2.0.jre17'
+  //   implementation 'com.microsoft.sqlserver:mssql-jdbc:11.2.0.jre17'
   
   // Google JSON 라이브러리
   // implementation 'com.google.code.gson:gson:2.8.9'
@@ -123,9 +121,6 @@ dependencies {
   // log4j 2.x 라이브러리
   // implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
 
-  // Use JUnit test framework.
   testImplementation 'junit:junit:4.13.2'
-
-
   implementation 'com.google.guava:guava:31.1-jre'
 }

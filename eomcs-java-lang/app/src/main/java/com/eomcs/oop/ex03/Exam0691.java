@@ -2,28 +2,23 @@
 package com.eomcs.oop.ex03;
 
 public class Exam0691 {
-
   static class A {
     static int a = 7;
-
     static {
-      System.out.println("A.static{}"); //1
+      System.out.println("A.static{}");
       a += B.b;
     }
   }
-
   static class B {
     static int b = 22;
-
     static {
-      System.out.println("B.static{}");// 2
+      System.out.println("B.static{}");
       b += A.a;
     }
   }
-
   public static void main(String[] args) {
-    System.out.println(A.a); // ?36
-    System.out.println(B.b); // ?29
+    System.out.println(A.a); // ?
+    System.out.println(B.b); // ?
 
     // 클래스 로딩 절차
     // 1) 클래스를 Method Area에 로딩한다.
