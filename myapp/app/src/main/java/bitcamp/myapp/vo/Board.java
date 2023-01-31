@@ -2,15 +2,22 @@ package bitcamp.myapp.vo;
 
 import java.util.Objects;
 
-public class Board  {
+// Serializable 인터페이스
+// 객체를 자동으로 직렬화 할수 있도록 설정
+// 따로 메서드를 구현할 필요가 없다
+// 단지 직렬화를 활성화시키는 표시자 역할을 할 뿐이다
+public class Board implements java.io.Serializable {
+  // 직렬화 데이터의 버전을 명시
+  // 나중에 데이터를 읽을때 버전을 보고 읽을수 있는 데이터인지 판단하는 용도로 사용
+  // - 누가? ObjectInputStream 클래스가!
+  private static final long serialVersionUID = 1L;
+
   private int no;
   private String title;
   private String content;
   private String password;
   private String createdDate;
   private int viewCount;
-
-
 
   @Override
   public String toString() {
