@@ -1,12 +1,12 @@
 package bitcamp.myapp.dao;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.sql.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
+
 import bitcamp.myapp.vo.Board;
 
 public class BoardDao {
@@ -56,15 +56,19 @@ public class BoardDao {
   }
 
   public void save(String filename) {
-    try (BufferedWriter out = new BufferedWriter(new FileWriter(filename))) {
-      out.flush();
+    try (FileWriter out = new FileWriter(filename)) {
+    	
 
-      // 2) 게시글 개수를 출력 : 4byte
-      //      for (Board b : out) {
-      //        out.write(b + System.out.append(filename));
-      //      }
-
-      //      out.flush();
+            for (Board b : list) {
+              out.write(String.format("%d,%s,%s,%S,%d,%s\n",
+            		  b.getNo(),
+            		  b.getTitle(),
+            		  b.getContent(),
+            		  b.getPassword(),
+            		  b.getViewCount(),
+            		  b.getCreatedDate()           		  
+            		  ));
+            }
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -72,27 +76,31 @@ public class BoardDao {
   }
 
 
-  @SuppressWarnings("unchecked")
   public void load(String filename) {
     if (list.size() > 0) { // 중복 로딩 방지!
       return;
     }
 
-    try (BufferedReader out = new BufferedReader(new FileReader(filename))) {
-      list = (List<Board>) out;
+    try (Scanner in = new Scanner(new FileReader(filename))) {
 
+    	while (true) {
+    		try {
+    		String[] values = in.nextLine().split(",");
+    		Board b = new Board();
+    		b.setNo(Integer.parseInt(values[0]));
+    		b.setTitle(values[1]);
+    		b.setContent(values[2]);
+    		b.setPassword(values[3]);
+    		b.setViewCount(Integer.parseInt(values[4]));
+    		b.setCreatedDate(values[5]);
+    		list.add(b);
+    		}catch(Exception e) {
+    			break;
+    		}
+    		
 
-      //      String s1;
-      //      while ((s1 = out.readLine()) != null) {
-      //        System.out.println(s1);
-
-      // 2) 저장된 게시글 개수를 읽는다: 4byte
-      //
-      //      if (list.size() > 0) {
-      //        lastNo = list.get(list.size() - 1).getNo();
-      //      }
-
-    } catch (Exception e) {
+    } 
+  }catch (Exception e) {
       e.printStackTrace();
     }
   }

@@ -3,11 +3,16 @@ package bitcamp.myapp.dao;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.sql.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
+
+import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.Student;
 
 public class StudentDao {
@@ -57,10 +62,21 @@ public class StudentDao {
   }
 
   public void save(String filename) {
-    try (
-        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
+	    try (FileWriter out = new FileWriter(filename)) {
+	    	
 
-      out.writeObject(list);
+            for (Student s : list) {
+              out.write(String.format("%d,%s,%s,%S,%s,%s,%b,%s,%s\n",
+            		  s.getNo(),
+            		  s.getTel(),
+            		  s.getPostNo(),
+            		  s.getBasicAddress(),
+            		  s.getDetailAddress(),
+            		  s.isWorking(),
+            		  s.getGender(),
+            		  s.getLevel()
+            		  ));
+            }
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -73,15 +89,23 @@ public class StudentDao {
       return;
     }
 
-    try (
-        ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename))) {
+    try (Scanner in = new Scanner(new FileReader(filename))) {
 
-      list = (List<Student>)in.readObject();
-
-      if (list.size() > 0) {
-        lastNo = list.get(list.size() - 1).getNo();
-      }
-
+    	while (true) {
+    		try {
+    		String[] values = in.nextLine().split(",");
+    		Student s = new Student();
+    		s.setNo(Integer.parseInt(values[0]));
+    		s.setTel(values[1]);
+    		s.setPostNo(values[2]);
+    		s.setBasicAddress(values[3]);
+    		s.setDetailAddress(values[4]);
+    		s.setWorking(values[5] == true ? 1 : 0);
+    		list.add(s);
+    		}catch(Exception e) {
+    			break;
+    		}
+    	}
     } catch (FileNotFoundException e) {
       System.out.println("데이터 파일이 존재하지 않습니다!");
 
