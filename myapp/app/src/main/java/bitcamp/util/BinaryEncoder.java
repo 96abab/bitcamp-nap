@@ -20,7 +20,7 @@ public class BinaryEncoder {
   }
 
   public static byte[] write(boolean value) {
-    byte[] bytes = new byte[1];
+    byte[] bytes = new byte[2];
     return bytes;
 
   }

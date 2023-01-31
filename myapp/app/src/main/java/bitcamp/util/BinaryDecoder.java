@@ -33,24 +33,32 @@ public class BinaryDecoder {
     return chaa;
 
   }
+  public static byte readByte(InputStream in) throws Exception {
+
+	    byte by = (byte) in.read();
+
+
+	    return by;
+
+	  }
   public static String readString(InputStream in) throws Exception {
-    // [2byte: 문자열의 바이트 배열길이[n바이트 : 문자열의 바이트배열]
+	    // [2byte: 문자열의 바이트 배열 길이][n바이트: 문자열의 바이트 배열]
 
-    // 2 바이트를 읽어 문자열의 배열 개수를 알아낸다
-    int length = in.read() << 8;
-    length |= in.read();
+	    // 1) 2바이트를 읽어 문자열의 배열 개수를 알아낸다.
+	    int length = in.read() << 8;
+	    length |= in.read();
 
-    // 문자열의 배열을  읽어들일 빈  배열을 준비
-    byte[] bytes = new byte[length];
+	    // 2) 문자열의 배열을 읽어 들일 빈 배열을 준비한다.
+	    byte[] bytes = new byte[length];
 
-    // 문자열의 배열을 읽어 빈 배열에 담는다
-    in.readNBytes(bytes, 0, length);
+	    // 3) 문자열의 배열을 읽어 빈 배열에 담는다.
+	    in.read(bytes, 0, length);
 
-    // 배열에 들어있는 문자 코드를 가지고 String객체를 생성
-    String str = new String(bytes);
+	    // 4) 배열에 들어 있는 문자 코드를 가지고 String 객체를 생성한다.
+	    String str = new String(bytes);
 
-    return str;
-  }
+	    return str;
+	  }
   public static void main(String[] args) throws Exception {
     byte[] bytes = new byte[] {0x00, 0x05, (byte)0x41 , (byte)0x42, (byte)0xea, (byte)0xb0, (byte)0x80};
 

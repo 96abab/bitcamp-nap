@@ -93,7 +93,8 @@ public class StudentDao {
         s.setDetailAddress(BinaryDecoder.readString(in));
         s.setWorking(BinaryDecoder.readBoolean(in));
         s.setGender(BinaryDecoder.readChar(in));
-        s.setPostNo(BinaryDecoder.readString(in));
+        s.setLevel(BinaryDecoder.readByte(in));
+//        s.setCreatedDate(BinaryDecoder.readString(in));
 
         list.add(s);
       }
