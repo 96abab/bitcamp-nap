@@ -1,69 +1,81 @@
 package com.eomcs.net;
 
-import java.io.PrintStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class CalcServer {
 
-  public static void main(String[] args) throws Exception{
+	public static String calc(String exp) {
+		StringTokenizer st = new StringTokenizer(exp, " ");
+		if (st.countTokens() != 3)
+			return "error";
 
+		String res = "";
+		int op1 = Integer.parseInt(st.nextToken());
+		String opcode = st.nextToken();
+		int op2 = Integer.parseInt(st.nextToken());
+		switch (opcode) {
+		case "+":
+			res = Integer.toString(op1 + op2);
+			break;
+		case "-":
+			res = Integer.toString(op1 - op2);
+			break;
+		case "*":
+			res = Integer.toString(op1 * op2);
+			break;
+		case "/":
+			res = Integer.toString(op1 / op2);
 
-    System.out.println("서버 실행");
+			break;
+		default:
+			res = "error";
+		}
+		return res;
 
-    ServerSocket serverSocket = new ServerSocket(8888);
-    Socket socket = serverSocket.accept();
+	}
 
-    System.out.println("클라이언트와 연결");
+	public static void main(String[] args) {
+		BufferedReader in = null;
+		BufferedWriter out = null;
+		ServerSocket listener = null;
+		Socket socket = null;
+		Scanner scanner = new Scanner(System.in);
 
-    Scanner in = new Scanner(socket.getInputStream());
-    PrintStream out = new PrintStream(socket.getOutputStream());
-
-    while (true) {
-      // 클라이언트가 보낸 문자열 한 줄을 읽을때 까지 리턴하지 않는다
-      String message = in.nextLine();
-      System.out.println(message);
-
-      System.out.println("첫번째 숫자를 입력하세요");
-      String str1 = keyScan.nextLine();
-      System.out.println("사칙연산 기호중 하나를 입력하세요");
-      String op = keyScan.nextLine();
-      System.out.println("두번째 숫자를 입력하세요");
-      String str2 = keyScan.nextLine();
-      int num1 = Integer.parseInt(str1);
-      int num2 = Integer.parseInt(str2);
-      int num3;
-      if (op.equals("+")) {
-        num3 = num1 + num2;
-      } else if (op.equals("-")) {
-        num3 = num1 - num2;
-      } else if (op.equals("/")) {
-        num3 = num1 / num2;
-      } else {
-        num3 = num1 * num2;
-      }
-      if (message.equals("quit")) {
-        break;
-      }
-      System.out.println(str1 + op + str2 + "=" + num3);
-
-      if (message.equals("quit")) {
-        break;
-      }
-
-      System.out.println("입력 > ");
-      //      String str = .nextLine();
-      out.println(str);
-
-    }
-
-    in.close();
-    socket.close();
-    serverSocket.close();
-
-    System.out.println("서버종료");
-  }
-
-
+		try {
+			listener = new ServerSocket(9999);
+			System.out.println("연결 대기 중......");
+			socket = listener.accept();
+			System.out.println("연결되었습니다.");
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			while (true) {
+				String inputMessage = in.readLine();
+				if (inputMessage.equalsIgnoreCase("quit")) {
+					System.out.println("Client 에서 quit로 연결을 종료하였음");
+					break;
+				}
+				String outputMessage = calc(inputMessage);
+				out.write(outputMessage + "\n");
+				out.flush();
+			}
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				scanner.close();
+				socket.close();
+				listener.close();
+			} catch (IOException e) {
+				System.out.println("입력 값 에러 발생!!");
+			}
+		}
+	}
 }

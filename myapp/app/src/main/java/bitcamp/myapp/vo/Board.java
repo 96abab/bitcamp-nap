@@ -2,14 +2,7 @@ package bitcamp.myapp.vo;
 
 import java.util.Objects;
 
-// Serializable 인터페이스
-// 객체를 자동으로 직렬화 할수 있도록 설정
-// 따로 메서드를 구현할 필요가 없다
-// 단지 직렬화를 활성화시키는 표시자 역할을 할 뿐이다
 public class Board implements java.io.Serializable {
-  // 직렬화 데이터의 버전을 명시
-  // 나중에 데이터를 읽을때 버전을 보고 읽을수 있는 데이터인지 판단하는 용도로 사용
-  // - 누가? ObjectInputStream 클래스가!
   private static final long serialVersionUID = 1L;
 
   private int no;
@@ -18,6 +11,37 @@ public class Board implements java.io.Serializable {
   private String password;
   private String createdDate;
   private int viewCount;
+
+  // Factory Method 패턴 + Information Expert 패턴
+  public static Board create(String csv) {
+    try {
+      String[] values = csv.split(",");
+
+      Board obj = new Board();
+      obj.setNo(Integer.parseInt(values[0]));
+      obj.setTitle(values[1]);
+      obj.setContent(values[2]);
+      obj.setPassword(values[3]);
+      obj.setViewCount(Integer.parseInt(values[4]));
+      obj.setCreatedDate(values[5]);
+
+      return obj;
+
+    } catch (Exception e) {
+      throw new RuntimeException("Board 객체 생성 오류!", e);
+    }
+  }
+
+  // Information Expert 패턴
+  public String toCsvString() {
+    return String.format("%d,%s,%s,%s,%d,%s",
+        this.getNo(),
+        this.getTitle(),
+        this.getContent(),
+        this.getPassword(),
+        this.getViewCount(),
+        this.getCreatedDate());
+  }
 
   @Override
   public String toString() {

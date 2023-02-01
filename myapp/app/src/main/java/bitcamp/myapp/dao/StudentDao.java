@@ -1,18 +1,13 @@
 package bitcamp.myapp.dao;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.sql.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
-
-import bitcamp.myapp.vo.Board;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import bitcamp.myapp.vo.Student;
 
 public class StudentDao {
@@ -62,52 +57,27 @@ public class StudentDao {
   }
 
   public void save(String filename) {
-	    try (FileWriter out = new FileWriter(filename)) {
-	    	
+    try (FileWriter out = new FileWriter(filename)) {
 
-            for (Student s : list) {
-              out.write(String.format("%d,%s,%s,%S,%s,%s,%b,%s,%s\n",
-            		  s.getNo(),
-            		  s.getTel(),
-            		  s.getPostNo(),
-            		  s.getBasicAddress(),
-            		  s.getDetailAddress(),
-            		  s.isWorking(),
-            		  s.getGender(),
-            		  s.getLevel()
-            		  ));
-            }
+      out.write(new Gson().toJson(list));
 
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
 
-  @SuppressWarnings("unchecked")
   public void load(String filename) {
-    if (list.size() > 0) {
+    if (list.size() > 0) { // 중복 로딩 방지!
       return;
     }
 
-    try (Scanner in = new Scanner(new FileReader(filename))) {
+    try (BufferedReader in = new BufferedReader(new FileReader(filename))) {
 
-    	while (true) {
-    		try {
-    		String[] values = in.nextLine().split(",");
-    		Student s = new Student();
-    		s.setNo(Integer.parseInt(values[0]));
-    		s.setTel(values[1]);
-    		s.setPostNo(values[2]);
-    		s.setBasicAddress(values[3]);
-    		s.setDetailAddress(values[4]);
-    		s.setWorking(values[5] == true ? 1 : 0);
-    		list.add(s);
-    		}catch(Exception e) {
-    			break;
-    		}
-    	}
-    } catch (FileNotFoundException e) {
-      System.out.println("데이터 파일이 존재하지 않습니다!");
+      list = new Gson().fromJson(in, new TypeToken<List<Student>>() {});
+
+      if (list.size() > 0) {
+        lastNo = list.get(list.size() - 1).getNo();
+      }
 
     } catch (Exception e) {
       e.printStackTrace();
