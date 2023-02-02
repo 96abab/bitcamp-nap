@@ -2,7 +2,9 @@ package bitcamp.myapp.servlet;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+
 import com.google.gson.Gson;
+
 import bitcamp.myapp.dao.StudentDao;
 import bitcamp.myapp.vo.Student;
 import bitcamp.util.Prompt;
@@ -15,7 +17,7 @@ public class StudentServlet {
     this.studentDao = studentDao;
   }
 
-  private void inputStudent(DataInputStream in, DataOutputStream out) throws Exception{
+  private void oninputStudent(DataInputStream in, DataOutputStream out) throws Exception{
     Student m = new Gson().fromJson(in.readUTF(), Student.class);
     this.studentDao.insert(m);
     out.writeUTF("200");
@@ -23,35 +25,23 @@ public class StudentServlet {
 
   }
 
-  private void printStudents() {
-
-    Student[] members = this.studentDao.findAll();
-
-    System.out.println("번호\t이름\t전화\t재직\t전공");
-
-    for (Student m : members) {
-      System.out.printf("%d\t%s\t%s\t%s\t%s\n",
-          m.getNo(), m.getName(), m.getTel(),
-          m.isWorking() ? "예" : "아니오",
-              getLevelText(m.getLevel()));
-    }
+  private void onprintStudents(DataInputStream in, DataOutputStream out) throws Exception {
+	  out.writeUTF("200");
+	  out.writeUTF(new Gson().toJson(this.studentDao.findAll()));
   }
 
-  private void printStudent() {
-    int memberNo = Prompt.inputInt("회원번호? ");
+  private void onprintStudent(DataInputStream in, DataOutputStream out) throws Exception {
 
-    Student m = this.studentDao.findByNo(memberNo);
+	    int studentNo = new Gson().fromJson(in.readUTF(), int.class);
 
-    System.out.printf("    이름: %s\n", m.getName());
-    System.out.printf("    전화: %s\n", m.getTel());
-    System.out.printf("우편번호: %s\n", m.getNo());
-    System.out.printf("기본주소: %s\n", m.getBasicAddress());
-    System.out.printf("상세주소: %s\n", m.getDetailAddress());
-    System.out.printf("재직여부: %s\n", m.isWorking() ? "예" : "아니오");
-    System.out.printf("    성별: %s\n", m.getGender() == 'M' ? "남자" : "여자");
-    System.out.printf("    전공: %s\n", getLevelText(m.getLevel()));
-    System.out.printf("  등록일: %s\n", m.getCreatedDate());
-  }
+	    Student m = this.studentDao.findByNo(studentNo);
+	    if (m == null) {
+	      out.writeUTF("400");
+	      return;
+	    }
+	    out.writeUTF("200");
+	    out.writeUTF(new Gson().toJson(m));
+	  }
 
   // 인스턴스 멤버(필드나 메서드)를 사용하지 않기 때문에
   // 그냥 스태틱 메서드로 두어라!
@@ -63,68 +53,33 @@ public class StudentServlet {
     }
   }
 
-  private void modifyStudent() {
-    int memberNo = Prompt.inputInt("회원번호? ");
+  private void onmodifyStudent(DataInputStream in, DataOutputStream out) throws Exception {
+	    Student student = new Gson().fromJson(in.readUTF(), Student.class);
 
-    Student old = this.studentDao.findByNo(memberNo);
+	    Student old = this.studentDao.findByNo(student.getNo());
+	    if (old == null) {
+	      out.writeUTF("400");
+	      return;
+	    }
+	    this.studentDao.update(student);
+	    out.writeUTF("200");
+	    out.writeUTF("success");
+	  }
 
-    if (old == null) {
-      System.out.println("해당 번호의 회원이 없습니다.");
-      return;
-    }
+  private void ondeleteStudent(DataInputStream in, DataOutputStream out) throws Exception {
+	    Student student = new Gson().fromJson(in.readUTF(), Student.class);
 
-    // 변경할 데이터를 저장할 인스턴스 준비
-    Student m = new Student();
-    m.setNo(old.getNo());
-    m.setCreatedDate(old.getCreatedDate());
-    m.setName(Prompt.inputString(String.format("이름(%s)? ", old.getName())));
-    m.setTel(Prompt.inputString(String.format("전화(%s)? ", old.getTel())));
-    m.setPostNo(Prompt.inputString(String.format("우편번호(%s)? ", old.getPostNo())));
-    m.setBasicAddress(Prompt.inputString(String.format("기본주소(%s)? ", old.getBasicAddress())));
-    m.setDetailAddress(Prompt.inputString(String.format("상세주소(%s)? ", old.getDetailAddress())));
-    m.setWorking(Prompt.inputInt(String.format(
-        "0. 미취업\n1. 재직중\n재직여부(%s)? ",
-        old.isWorking() ? "재직중" : "미취업")) == 1);
-    m.setGender(Prompt.inputInt(String.format(
-        "0. 남자\n1. 여자\n성별(%s)? ",
-        old.getGender() == 'M' ? "남자" : "여자")) == 0 ? 'M' : 'W');
-    m.setLevel((byte) Prompt.inputInt(String.format(
-        "0. 비전공자\n1. 준전공자\n2. 전공자\n전공(%s)? ",
-        getLevelText(old.getLevel()))));
+	    Student m = this.studentDao.findByNo(student.getNo());
+	    if (m == null) {
+	      out.writeUTF("400");
+	      return;
+	    }
+	    this.studentDao.delete(m);
+	    out.writeUTF("200");
+	    out.writeUTF("success");
+	  }
 
-    String str = Prompt.inputString("정말 변경하시겠습니까?(y/N) ");
-    if (str.equalsIgnoreCase("Y")) {
-      this.studentDao.update(m);
-      System.out.println("변경했습니다.");
-    } else {
-      System.out.println("변경 취소했습니다.");
-    }
-
-  }
-
-  private void deleteStudent() {
-    int memberNo = Prompt.inputInt("회원번호? ");
-
-    Student m = this.studentDao.findByNo(memberNo);
-
-    if (m == null) {
-      System.out.println("해당 번호의 회원이 없습니다.");
-      return;
-    }
-
-    String str = Prompt.inputString("정말 삭제하시겠습니까?(y/N) ");
-    if (!str.equalsIgnoreCase("Y")) {
-      System.out.println("삭제 취소했습니다.");
-      return;
-    }
-
-    studentDao.delete(m);
-
-    System.out.println("삭제했습니다.");
-
-  }
-
-  private void searchStudent() {
+  private void onsearchStudent() {
 
     Student[] members = this.studentDao.findAll();
 
@@ -142,47 +97,23 @@ public class StudentServlet {
     }
   }
 
-  public void service() {
+  public void service(DataInputStream in, DataOutputStream out) throws Exception {
+	    try {
 
-    studentDao.load("student.json");
+	        String action = in.readUTF();
 
-    while (true) {
-      System.out.printf("[%s]\n", this.title);
-      System.out.println("1. 등록");
-      System.out.println("2. 목록");
-      System.out.println("3. 조회");
-      System.out.println("4. 변경");
-      System.out.println("5. 삭제");
-      System.out.println("6. 검색");
-      System.out.println("0. 이전");
-
-      int menuNo;
-      try {
-        menuNo = Prompt.inputInt(String.format("%s> ", this.title));
-      } catch (Exception e) {
-        System.out.println("메뉴 번호가 옳지 않습니다.");
-        continue;
-      }
-
-      try {
-        switch (menuNo) {
-          case 0:
-            studentDao.save("student.json");
-            return;
-          case 1: this.inputStudent(); break;
-          case 2: this.printStudents(); break;
-          case 3: this.printStudent(); break;
-          case 4: this.modifyStudent(); break;
-          case 5: this.deleteStudent(); break;
-          case 6: this.searchStudent(); break;
-          default:
-            System.out.println("잘못된 메뉴 번호 입니다.");
-        }
-      } catch (Exception e) {
-        System.out.printf("명령 실행 중 오류 발생! - %s : %s\n",
-            e.getMessage(),
-            e.getClass().getSimpleName());
-      }
-    }
+	        switch (action) {
+	          case "inputStudent": this.oninputStudent(in, out); break;
+	          case "printStudents": this.onprintStudents(in, out); break;
+	          case "printStudent": this.onprintStudent(in, out); break;
+	          case "modifyStudent": this.onmodifyStudent(in, out); break;
+	          case "deleteStudent": this.ondeleteStudent(in, out); break;
+	          default:
+	            System.out.println("잘못된 메뉴 번호 입니다.");
+	        }
+	      }catch (Exception e) {
+	        out.writeUTF("500");
+	      }
+	    }
   }
-}
+
