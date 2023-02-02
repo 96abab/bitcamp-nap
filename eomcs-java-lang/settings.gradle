@@ -8,4 +8,5 @@
  */
 
 rootProject.name = 'eomcs-java-lang'
-include('app')
+include('myapp-client')
+include('myapp-server')
