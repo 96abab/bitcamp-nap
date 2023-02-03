@@ -14,44 +14,31 @@ public class TeacherServlet {
     this.teacherDao = teacherDao;
   }
 
-  private void oninputTeacher(DataInputStream in, DataOutputStream out) throws Exception {
-    Teacher m = new Gson().fromJson(in.readUTF(), Teacher.class);
-    this.teacherDao.insert(m);
+  private void onInsert(DataInputStream in, DataOutputStream out) throws Exception {
+    Teacher b = new Gson().fromJson(in.readUTF(), Teacher.class);
+    this.teacherDao.insert(b);
     out.writeUTF("200");
     out.writeUTF("success");
-
   }
 
-  private void onprintTeachers(DataInputStream in, DataOutputStream out) throws Exception {
+  private void onFindAll(DataInputStream in, DataOutputStream out) throws Exception {
     out.writeUTF("200");
     out.writeUTF(new Gson().toJson(this.teacherDao.findAll()));
   }
 
-  private void onprintTeacher(DataInputStream in , DataOutputStream out) throws Exception {
-
+  private void onFindByNo(DataInputStream in, DataOutputStream out) throws Exception {
     int teacherNo = new Gson().fromJson(in.readUTF(), int.class);
 
-    Teacher m = this.teacherDao.findByNo(teacherNo);
-    if (m == null) {
+    Teacher b = this.teacherDao.findByNo(teacherNo);
+    if (b == null) {
       out.writeUTF("400");
       return;
     }
     out.writeUTF("200");
-    out.writeUTF(new Gson().toJson(m));
+    out.writeUTF(new Gson().toJson(b));
   }
 
-  private static String getDegreeText(int degree) {// 수정?
-    switch (degree) {
-      case 1: return "고졸";
-      case 2: return "전문학사";
-      case 3: return "학사";
-      case 4: return "석사";
-      case 5: return "박사";
-      default: return "기타";
-    }
-  }
-
-  private void onmodifyTeacher(DataInputStream in, DataOutputStream out) throws Exception {
+  private void onUpdate(DataInputStream in, DataOutputStream out) throws Exception{
     Teacher teacher = new Gson().fromJson(in.readUTF(), Teacher.class);
 
     Teacher old = this.teacherDao.findByNo(teacher.getNo());
@@ -64,35 +51,35 @@ public class TeacherServlet {
     out.writeUTF("success");
   }
 
-
-  private void ondeleteTeacher(DataInputStream in, DataOutputStream out) throws Exception {
+  private void onDelete(DataInputStream in, DataOutputStream out) throws Exception {
     Teacher teacher = new Gson().fromJson(in.readUTF(), Teacher.class);
 
-    Teacher m = this.teacherDao.findByNo(teacher.getNo());
-    if (m == null) {
+    Teacher b = this.teacherDao.findByNo(teacher.getNo());
+    if (b == null) {
       out.writeUTF("400");
       return;
     }
-    this.teacherDao.delete(m);
+
+    this.teacherDao.delete(b);
     out.writeUTF("200");
     out.writeUTF("success");
   }
 
   public void service(DataInputStream in, DataOutputStream out) throws Exception {
     try {
-
+      // 클라이언트가 요구하는 액션을 읽는다.
       String action = in.readUTF();
 
       switch (action) {
-        case "inputTeacher": this.oninputTeacher(in, out); break;
-        case "printTeachers": this.onprintTeachers(in, out); break;
-        case "printTeacher": this.onprintTeacher(in, out); break;
-        case "modifyTeacher": this.onmodifyTeacher(in, out); break;
-        case "deleteTeacher": this.ondeleteTeacher(in, out); break;
+        case "insert": this.onInsert(in, out); break;
+        case "findAll": this.onFindAll(in, out); break;
+        case "findByNo": this.onFindByNo(in, out); break;
+        case "update": this.onUpdate(in, out); break;
+        case "delete": this.onDelete(in, out); break;
         default:
           System.out.println("잘못된 메뉴 번호 입니다.");
       }
-    }catch (Exception e) {
+    } catch (Exception e) {
       out.writeUTF("500");
     }
   }

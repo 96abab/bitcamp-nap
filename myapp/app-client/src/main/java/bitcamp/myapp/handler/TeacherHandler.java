@@ -15,27 +15,29 @@ public class TeacherHandler {
   }
 
   private void inputTeacher() {
-    Teacher t = new Teacher();
-    t.setName(Prompt.inputString("이름? "));
-    t.setTel(Prompt.inputString("전화? "));
-    t.setEmail(Prompt.inputString("이메일? "));
-    t.setDegree(Prompt.inputInt("1. 고졸\n2. 전문학사\n3. 학사\n4. 석사\n5. 박사\n0. 기타\n학위? "));
-    t.setSchool(Prompt.inputString("학교? "));
-    t.setMajor(Prompt.inputString("전공? "));
-    t.setWage(Prompt.inputInt("강의료(시급)? "));
+    Teacher m = new Teacher();
+    m.setName(Prompt.inputString("이름? "));
+    m.setTel(Prompt.inputString("전화? "));
+    m.setEmail(Prompt.inputString("이메일? "));
+    m.setDegree(Prompt.inputInt("1. 고졸\n2. 전문학사\n3. 학사\n4. 석사\n5. 박사\n0. 기타\n학위? "));
+    m.setSchool(Prompt.inputString("학교? "));
+    m.setMajor(Prompt.inputString("전공? "));
+    m.setWage(Prompt.inputInt("강의료(시급)? "));
 
-    this.teacherDao.insert(t);
+    this.teacherDao.insert(m);
   }
 
   private void printTeachers() {
+
+    Object[] teachers = this.teacherDao.findAll();
+
     System.out.println("번호\t이름\t전화\t학위\t전공\t시강료");
 
-    Teacher[] teachers = this.teacherDao.findAll();
-
-    for (Teacher t : teachers) {
+    for (Object obj : teachers) {
+      Teacher m = (Teacher) obj;
       System.out.printf("%d\t%s\t%s\t%s\t%s\t%d\n",
-          t.getNo(), t.getName(), t.getTel(),
-          getDegreeText(t.getDegree()), t.getMajor(), t.getWage());
+          m.getNo(), m.getName(), m.getTel(),
+          getDegreeText(m.getDegree()), m.getMajor(), m.getWage());
     }
   }
 
@@ -59,7 +61,7 @@ public class TeacherHandler {
     System.out.printf("  등록일: %s\n", m.getCreatedDate());
   }
 
-  private static String getDegreeText(int degree) {// 수정??
+  private static String getDegreeText(int degree) {
     switch (degree) {
       case 1: return "고졸";
       case 2: return "전문학사";
@@ -120,7 +122,7 @@ public class TeacherHandler {
       return;
     }
 
-    this.teacherDao.delete(m);
+    teacherDao.delete(m);
 
     System.out.println("삭제했습니다.");
 

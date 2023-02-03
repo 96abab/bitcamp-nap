@@ -5,8 +5,6 @@ import java.util.LinkedList;
 import bitcamp.myapp.dao.LocalBoardDao;
 import bitcamp.myapp.dao.LocalStudentDao;
 import bitcamp.myapp.dao.LocalTeacherDao;
-import bitcamp.myapp.dao.NetworkStudentDao;
-import bitcamp.myapp.dao.NetworkTeacherDao;
 import bitcamp.myapp.handler.BoardHandler;
 import bitcamp.myapp.handler.StudentHandler;
 import bitcamp.myapp.handler.TeacherHandler;
@@ -28,12 +26,10 @@ public class ClientApp0 {
 
     LocalStudentDao studentDao = new LocalStudentDao(new ArrayList<Student>());
     studentDao.load("student.json");
-//    NetworkStudentDao studentDao = new NetworkStudentDao(in, out);
 
     LocalTeacherDao teacherDao = new LocalTeacherDao(new ArrayList<Teacher>());
     teacherDao.load("teacher.json");
-//    NetworkTeacherDao teacherDao = new NetworkTeacherDao(in, out);
-    
+
     StudentHandler studentHandler = new StudentHandler("학생", studentDao);
     TeacherHandler teacherHandler = new TeacherHandler("강사", teacherDao);
     BoardHandler boardHandler = new BoardHandler("게시판", boardDao);
