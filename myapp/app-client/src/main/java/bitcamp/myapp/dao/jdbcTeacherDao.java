@@ -15,7 +15,7 @@ public class jdbcTeacherDao implements TeacherDao {
         "jdbc:mariadb://localhost:3306/studydb", "study","1111");
         Statement stmt = con.createStatement()) {
 
-      String sql = String.format("insert into app_teacher(name, tel, email, degree, school, major, wage) values('%s','%s','%s','%s','%s','%s','%s')",
+      String sql = String.format("insert into app_teacher(name, tel, email, degree, school, major, wage) values('%s','%s','%s',%d,'%s','%s',%d)",
           t.getName(),t.getTel(),t.getEmail(),t.getDegree(),t.getSchool(),t.getMajor(),t.getWage());
       stmt.executeUpdate(sql);
 
@@ -62,7 +62,7 @@ public class jdbcTeacherDao implements TeacherDao {
         "jdbc:mariadb://localhost:3306/studydb", "study","1111");
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery(
-            "select teacher_id, name,tel,email,created_date,degree,school,major,wage from app_teacher order by teacher_id desc")) {
+            "select teacher_id, name,tel,email,created_date,degree,school,major,wage from app_teacher where teacher_id=" +no)) {
 
       ArrayList<Teacher> list = new ArrayList<>();
       while (rs.next()) {
@@ -94,8 +94,8 @@ public class jdbcTeacherDao implements TeacherDao {
         "jdbc:mariadb://localhost:3306/studydb", "study","1111");
         Statement stmt = con.createStatement()) {
 
-      String sql = String.format("update app_teacher set name='%s', tel='%s', email='%s', degree='%s', school='%s', major='%s', wage='%s' where teacher_id=%d",
-          t.getName(),t.getTel(),t.getEmail(),t.getDegree(),t.getSchool(),t.getMajor(),t.getWage());
+      String sql = String.format("update app_teacher set name='%s', tel='%s', email='%s', degree=%d, school='%s', major='%s', wage=%d where teacher_id=%d",
+          t.getName(),t.getTel(),t.getEmail(),t.getDegree(),t.getSchool(),t.getMajor(),t.getWage(),t.getNo());
       stmt.executeUpdate(sql);
 
     }catch (Exception e) {

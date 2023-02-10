@@ -61,7 +61,7 @@ public class jdbcStudentDao implements StudentDao {
         "jdbc:mariadb://localhost:3306/studydb", "study","1111");
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery(
-            "select student_id, name,tel,created_date,pst_no,bas_addr,det_addr,work,gender,level from app_student order by student_id desc")) {
+            "select student_id, name,tel,created_date,pst_no,bas_addr,det_addr,work,gender,level from app_student where student_id=" +no)) {
 
       ArrayList<Student> list = new ArrayList<>();
       while (rs.next()) {

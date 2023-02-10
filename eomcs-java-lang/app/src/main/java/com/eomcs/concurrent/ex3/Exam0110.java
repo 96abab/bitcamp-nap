@@ -20,6 +20,7 @@ public class Exam0110 {
           System.out.println("===> " + i);
         }
       }
+
     }
 
     // 스레드 실행
