@@ -2,11 +2,12 @@ package bitcamp.myapp.handler;
 
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.vo.Board;
-import bitcamp.util.Prompt;
 import bitcamp.util.StreamTool;
 
 public class BoardHandler {
 
+  int cnt;
+  int cnt2;
   private BoardDao boardDao;
   private String title;
 
@@ -22,7 +23,7 @@ public class BoardHandler {
     b.setPassword(streamTool.promptString("암호? "));
 
     this.boardDao.insert(b);
-    streamTool.send();
+    streamTool.println("입력했습니다").send();
   }
 
   private void printBoards(StreamTool streamTool) throws Exception {
@@ -32,7 +33,7 @@ public class BoardHandler {
 
     for (Board b : boards) {
       streamTool.printf("%d\t%s\t%s\t%d\n",
-          b.getNo(), b.getTitle(), b.getCreatedDate(), b.getViewCount());
+          b.getNo(), b.getTitle(), b.getCreatedDate(), b.getViewCount() + cnt);
     }
 
     streamTool.send();
@@ -42,28 +43,34 @@ public class BoardHandler {
   private void printBoard(StreamTool streamTool) throws Exception {
     int boardNo = streamTool.promptInt("게시글 번호? ");
 
+
     Board b = this.boardDao.findByNo(boardNo);
+
 
     if (b == null) {
       streamTool.println("해당 번호의 게시글 없습니다.").send();
       return;
     }
+    cnt++; 
+
+
+
 
     streamTool.printf("    제목: %s\n", b.getTitle())
     .printf("    내용: %s\n", b.getContent())
     .printf("  등록일: %s\n", b.getCreatedDate())
-    .printf("  조회수: %d\n", b.getViewCount());
-    b.setViewCount(b.getViewCount() + 1);
-    streamTool.send();
+    .printf("  조회수: %d\n", b.getViewCount() + cnt)
+    //    b.setViewCount(b.getViewCount() + 1);
+    .send();
   }
 
-  private void modifyBoard() {
-    int boardNo = Prompt.inputInt("게시글 번호? ");
+  private void modifyBoard(StreamTool streamTool) throws Exception {
+    int boardNo = streamTool.promptInt("게시글 번호? ");
 
     Board old = this.boardDao.findByNo(boardNo);
 
     if (old == null) {
-      System.out.println("해당 번호의 게시글이 없습니다.");
+      streamTool.println("해당 번호의 게시글이 없습니다.").send();
       return;
     }
 
@@ -71,67 +78,67 @@ public class BoardHandler {
     Board b = new Board();
     b.setNo(old.getNo());
     b.setCreatedDate(old.getCreatedDate());
-    b.setTitle(Prompt.inputString(String.format("제목(%s)? ", old.getTitle())));
-    b.setContent(Prompt.inputString(String.format("내용(%s)? ", old.getContent())));
-    b.setPassword(Prompt.inputString("암호? "));
+    b.setTitle(streamTool.promptString(String.format("제목(%s)? ", old.getTitle())));
+    b.setContent(streamTool.promptString(String.format("내용(%s)? ", old.getContent())));
+    b.setPassword(streamTool.promptString("암호? "));
     b.setViewCount(old.getViewCount());
 
     if (!old.getPassword().equals(b.getPassword())) {
-      System.out.println("암호가 맞지 않습니다!");
+      streamTool.println("암호가 맞지 않습니다!");
       return;
     }
 
-    String str = Prompt.inputString("정말 변경하시겠습니까?(y/N) ");
+    String str = streamTool.promptString("정말 변경하시겠습니까?(y/N) ");
     if (str.equalsIgnoreCase("Y")) {
       this.boardDao.update(b);
-      System.out.println("변경했습니다.");
+      streamTool.println("변경했습니다.");
     } else {
-      System.out.println("변경 취소했습니다.");
+      streamTool.println("변경 취소했습니다.");
     }
+    streamTool.send();
 
   }
 
-  private void deleteBoard() {
-    int boardNo = Prompt.inputInt("게시글 번호? ");
+  private void deleteBoard(StreamTool streamTool) throws Exception {
+    int boardNo = streamTool.promptInt("게시글 번호? ");
 
     Board b = this.boardDao.findByNo(boardNo);
 
     if (b == null) {
-      System.out.println("해당 번호의 게시글이 없습니다.");
+      streamTool.println("해당 번호의 게시글이 없습니다.").send();
       return;
     }
 
-    String password = Prompt.inputString("암호? ");
+    String password = streamTool.promptString("암호? ");
     if (!b.getPassword().equals(password)) {
-      System.out.println("암호가 맞지 않습니다!");
+      streamTool.println("암호가 맞지 않습니다!").send();
       return;
     }
 
-    String str = Prompt.inputString("정말 삭제하시겠습니까?(y/N) ");
+    String str = streamTool.promptString("정말 삭제하시겠습니까?(y/N) ");
     if (!str.equalsIgnoreCase("Y")) {
-      System.out.println("삭제 취소했습니다.");
+      streamTool.println("삭제 취소했습니다.").send();
       return;
     }
 
     this.boardDao.delete(b);
 
-    System.out.println("삭제했습니다.");
+    streamTool.println("삭제했습니다.").send();
 
   }
 
-  private void searchBoard() {
-    Board[] boards = this.boardDao.findAll();
+  private void searchBoard(StreamTool streamTool) throws Exception {
+    String keyword = streamTool.promptString("검색어? ");
 
-    String keyword = Prompt.inputString("검색어? ");
-    System.out.println("번호\t제목\t작성일\t조회수");
+    Board[] boards = this.boardDao.findByKeyword(keyword);
+
+    streamTool.println("번호\t제목\t작성일\t조회수");
 
     for (Board b : boards) {
-      if (b.getTitle().indexOf(keyword) != -1 ||
-          b.getContent().indexOf(keyword) != -1) {
-        System.out.printf("%d\t%s\t%s\t%d\n",
-            b.getNo(), b.getTitle(), b.getCreatedDate(), b.getViewCount());
-      }
+      streamTool.printf("%d\t%s\t%s\t%d\n",
+          b.getNo(), b.getTitle(), b.getCreatedDate(), b.getViewCount());
     }
+    streamTool.send();
   }
 
   public void service(StreamTool streamTool) throws Exception {
@@ -157,14 +164,14 @@ public class BoardHandler {
       try {
         switch (menuNo) {
           case 0:
-            streamTool.println().send();
+            streamTool.println("메인화면으로 이동!!").send();
             return;
           case 1: this.inputBoard(streamTool); break;
           case 2: this.printBoards(streamTool); break;
           case 3: this.printBoard(streamTool); break;
-          case 4: this.modifyBoard(); break;
-          case 5: this.deleteBoard(); break;
-          case 6: this.searchBoard(); break;
+          case 4: this.modifyBoard(streamTool); break;
+          case 5: this.deleteBoard(streamTool); break;
+          case 6: this.searchBoard(streamTool); break;
           default:
             streamTool.println("잘못된 메뉴 번호 입니다.").send();
         }
@@ -181,9 +188,9 @@ public class BoardHandler {
     .println("1. 등록")
     .println("2. 목록")
     .println("3. 조회")
-    //    .println("4. 변경")
-    //    .println("5. 삭제")
-    //    .println("6. 검색")
+    .println("4. 변경")
+    .println("5. 삭제")
+    .println("6. 검색")
     //    .println("0. 이전")
     .send();
   }

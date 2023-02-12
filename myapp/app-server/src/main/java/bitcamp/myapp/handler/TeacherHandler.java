@@ -2,7 +2,7 @@ package bitcamp.myapp.handler;
 
 import bitcamp.myapp.dao.TeacherDao;
 import bitcamp.myapp.vo.Teacher;
-import bitcamp.util.Prompt;
+import bitcamp.util.StreamTool;
 
 public class TeacherHandler {
 
@@ -14,51 +14,54 @@ public class TeacherHandler {
     this.teacherDao = teacherDao;
   }
 
-  private void inputTeacher() {
+  private void inputTeacher(StreamTool streamTool) throws Exception  {
     Teacher m = new Teacher();
-    m.setName(Prompt.inputString("이름? "));
-    m.setTel(Prompt.inputString("전화? "));
-    m.setEmail(Prompt.inputString("이메일? "));
-    m.setDegree(Prompt.inputInt("1. 고졸\n2. 전문학사\n3. 학사\n4. 석사\n5. 박사\n0. 기타\n학위? "));
-    m.setSchool(Prompt.inputString("학교? "));
-    m.setMajor(Prompt.inputString("전공? "));
-    m.setWage(Prompt.inputInt("강의료(시급)? "));
+    m.setName(streamTool.promptString("이름? "));
+    m.setTel(streamTool.promptString("전화? "));
+    m.setEmail(streamTool.promptString("이메일? "));
+    m.setDegree(streamTool.promptInt("1. 고졸\n2. 전문학사\n3. 학사\n4. 석사\n5. 박사\n0. 기타\n학위? "));
+    m.setSchool(streamTool.promptString("학교? "));
+    m.setMajor(streamTool.promptString("전공? "));
+    m.setWage(streamTool.promptInt("강의료(시급)? "));
 
     this.teacherDao.insert(m);
+    streamTool.println("입력했습니다").send();
   }
 
-  private void printTeachers() {
+  private void printTeachers(StreamTool streamTool) throws Exception {
 
     Object[] teachers = this.teacherDao.findAll();
 
-    System.out.println("번호\t이름\t전화\t학위\t전공\t시강료");
+    streamTool.println("번호\t이름\t전화\t학위\t전공\t시강료");
 
     for (Object obj : teachers) {
       Teacher m = (Teacher) obj;
-      System.out.printf("%d\t%s\t%s\t%s\t%s\t%d\n",
+      streamTool.printf("%d\t%s\t%s\t%s\t%s\t%d\n",
           m.getNo(), m.getName(), m.getTel(),
           getDegreeText(m.getDegree()), m.getMajor(), m.getWage());
     }
+    streamTool.send();
   }
 
-  private void printTeacher() {
-    int teacherNo = Prompt.inputInt("강사번호? ");
+  private void printTeacher(StreamTool streamTool) throws Exception {
+    int teacherNo = streamTool.promptInt("강사번호? ");
 
     Teacher m = this.teacherDao.findByNo(teacherNo);
 
     if (m == null) {
-      System.out.println("해당 번호의 강사가 없습니다.");
+      streamTool.println("해당 번호의 강사가 없습니다.").send();
       return;
     }
 
-    System.out.printf("    이름: %s\n", m.getName());
-    System.out.printf("    전화: %s\n", m.getTel());
-    System.out.printf("  이메일: %s\n", m.getEmail());
-    System.out.printf("    학위: %s\n", getDegreeText(m.getDegree()));
-    System.out.printf("    학교: %s\n", m.getSchool());
-    System.out.printf("    전공: %s\n", m.getMajor());
-    System.out.printf("  강의료: %s\n", m.getWage());
-    System.out.printf("  등록일: %s\n", m.getCreatedDate());
+    streamTool.printf("    이름: %s\n", m.getName())
+    .printf("    전화: %s\n", m.getTel())
+    .printf("  이메일: %s\n", m.getEmail())
+    .printf("    학위: %s\n", getDegreeText(m.getDegree()))
+    .printf("    학교: %s\n", m.getSchool())
+    .printf("    전공: %s\n", m.getMajor())
+    .printf("  강의료: %s\n", m.getWage())
+    .printf("  등록일: %s\n", m.getCreatedDate())
+    .send();
   }
 
   private static String getDegreeText(int degree) {
@@ -72,13 +75,13 @@ public class TeacherHandler {
     }
   }
 
-  private void modifyTeacher() {
-    int teacherNo = Prompt.inputInt("강사번호? ");
+  private void modifyTeacher(StreamTool streamTool) throws Exception {
+    int teacherNo = streamTool.promptInt("강사번호? ");
 
     Teacher old = this.teacherDao.findByNo(teacherNo);
 
     if (old == null) {
-      System.out.println("해당 번호의 강사가 없습니다.");
+      streamTool.println("해당 번호의 강사가 없습니다.").send();
       return;
     }
 
@@ -86,70 +89,113 @@ public class TeacherHandler {
     Teacher m = new Teacher();
     m.setNo(old.getNo());
     m.setCreatedDate(old.getCreatedDate());
-    m.setName(Prompt.inputString(String.format("이름(%s)? ", old.getName())));
-    m.setTel(Prompt.inputString(String.format("전화(%s)? ", old.getTel())));
-    m.setEmail(Prompt.inputString(String.format("이메일(%s)? ", old.getEmail())));
-    m.setDegree(Prompt.inputInt(String.format(
+    m.setName(streamTool.promptString(String.format("이름(%s)? ", old.getName())));
+    m.setTel(streamTool.promptString(String.format("전화(%s)? ", old.getTel())));
+    m.setEmail(streamTool.promptString(String.format("이메일(%s)? ", old.getEmail())));
+    m.setDegree(streamTool.promptInt(String.format(
         "1. 고졸\n2. 전문학사\n3. 학사\n4. 석사\n5. 박사\n0. 기타\n학위(%s)? ",
         getDegreeText(old.getDegree()))));
-    m.setSchool(Prompt.inputString(String.format("학교(%s)? ", old.getSchool())));
-    m.setMajor(Prompt.inputString(String.format("전공(%s)? ", old.getMajor())));
-    m.setWage(Prompt.inputInt(String.format("강의료(시급)(%s)? ", old.getWage())));
+    m.setSchool(streamTool.promptString(String.format("학교(%s)? ", old.getSchool())));
+    m.setMajor(streamTool.promptString(String.format("전공(%s)? ", old.getMajor())));
+    m.setWage(streamTool.promptInt(String.format("강의료(시급)(%s)? ", old.getWage())));
 
-    String str = Prompt.inputString("정말 변경하시겠습니까?(y/N) ");
+    String str = streamTool.promptString("정말 변경하시겠습니까?(y/N) ");
     if (str.equalsIgnoreCase("Y")) {
       this.teacherDao.update(m);
-      System.out.println("변경했습니다.");
+      streamTool.println("변경했습니다.");
     } else {
-      System.out.println("변경 취소했습니다.");
+      streamTool.println("변경 취소했습니다.");
     }
-
+    streamTool.send();
   }
 
-  private void deleteTeacher() {
-    int teacherNo = Prompt.inputInt("강사번호? ");
+  private void deleteTeacher(StreamTool streamTool) throws Exception {
+    int teacherNo = streamTool.promptInt("강사번호? ");
 
     Teacher m = this.teacherDao.findByNo(teacherNo);
 
     if (m == null) {
-      System.out.println("해당 번호의 강사가 없습니다.");
+      streamTool.println("해당 번호의 강사가 없습니다.").send();
       return;
     }
 
-    String str = Prompt.inputString("정말 삭제하시겠습니까?(y/N) ");
+    String str = streamTool.promptString("정말 삭제하시겠습니까?(y/N) ");
     if (!str.equalsIgnoreCase("Y")) {
-      System.out.println("삭제 취소했습니다.");
+      streamTool.println("삭제 취소했습니다.").send();
       return;
     }
 
     teacherDao.delete(m);
 
-    System.out.println("삭제했습니다.");
+    streamTool.println("삭제했습니다.").send();
 
   }
 
-  public void service() {
+  private void searchTeacher(StreamTool streamTool) throws Exception {
+    String keyword = streamTool.promptString("검색어? ");
+
+    Teacher[] teachers = this.teacherDao.findByKeyword(keyword);
+
+    streamTool.println("번호\t이름\t전화\t학위\t전공\t시강료");
+
+    for (Teacher m : teachers) {
+      streamTool.printf("%d\t%s\t%s\t%s\t%s\t%d\n",
+          m.getNo(), m.getName(), m.getTel(),
+          getDegreeText(m.getDegree()), m.getMajor(), m.getWage());
+    }
+    streamTool.send();
+  }
+
+
+  public void service(StreamTool streamTool) throws Exception{
+
+    menu(streamTool);
+
+
 
     while (true) {
-      System.out.printf("[%s]\n", this.title);
-      System.out.println("1. 등록");
-      System.out.println("2. 목록");
-      System.out.println("3. 조회");
-      System.out.println("4. 변경");
-      System.out.println("5. 삭제");
-      System.out.println("0. 이전");
-      int menuNo = Prompt.inputInt(String.format("%s> ", this.title));
+      String command = streamTool.readString();
 
-      switch (menuNo) {
-        case 0: return;
-        case 1: this.inputTeacher(); break;
-        case 2: this.printTeachers(); break;
-        case 3: this.printTeacher(); break;
-        case 4: this.modifyTeacher(); break;
-        case 5: this.deleteTeacher(); break;
-        default:
-          System.out.println("잘못된 메뉴 번호 입니다.");
+      if (command.equals("menu")) {
+        menu(streamTool);
+        continue;
+      }
+
+      int menuNo;
+      try {
+        menuNo = Integer.parseInt(command);
+      }catch (Exception e) {
+        streamTool.println("메뉴 번호가 옳지 않습니다").println().send();
+        continue;
+      }
+      try {
+        switch (menuNo) {
+          case 0: return;
+          case 1: this.inputTeacher(streamTool); break;
+          case 2: this.printTeachers(streamTool); break;
+          case 3: this.printTeacher(streamTool); break;
+          case 4: this.modifyTeacher(streamTool); break;
+          case 5: this.deleteTeacher(streamTool); break;
+          case 6: this.searchTeacher(streamTool); break;
+          default:
+            System.out.println("잘못된 메뉴 번호 입니다.");
+        }
+      }catch (Exception e) {
+        streamTool.printf("명령 실행중 오류 발생 - %s : %s\n",
+            e.getMessage(),
+            e.getClass().getSimpleName()).send();
       }
     }
+  }
+  void menu(StreamTool streamTool) throws Exception {
+    streamTool.printf("[%s]\n", this.title)
+    .println("1. 등록")
+    .println("2. 목록")
+    .println("3. 조회")
+    .println("4. 변경")
+    .println("5. 삭제")
+    .println("6. 검색")
+    .println("0. 이전")
+    .send();
   }
 }

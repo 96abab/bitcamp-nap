@@ -203,7 +203,7 @@ public class StudentHandler {
     .println("4. 변경")
     .println("5. 삭제")
     .println("6. 검색")
-    //    .println("0. 이전")
+    .println("0. 이전")
     .send();
   }
 }
