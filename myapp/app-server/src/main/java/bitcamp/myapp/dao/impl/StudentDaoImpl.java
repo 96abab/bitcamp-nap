@@ -14,25 +14,25 @@ public class StudentDaoImpl implements StudentDao {
 
   Connection con;
 
-  // 의존객체 Connection 을 생성자에서 받는다.
   public StudentDaoImpl(Connection con) {
     this.con = con;
   }
 
   @Override
   public void insert(Student s) {
+
     try (Statement stmt = con.createStatement()) {
 
       String sql = String.format("insert into app_student("
-          + " member_id,"
-          + " pst_no,"
-          + " bas_addr,"
-          + " det_addr,"
-          + " work, "
-          + " gender, "
-          + " level)"
+          + "  member_id,"
+          + "  pst_no,"
+          + "  bas_addr,"
+          + "  det_addr,"
+          + "  work,"
+          + "  gender,"
+          + "  level)"
           + " values('%s','%s','%s','%s',%b,'%s',%d)",
-          s.getNo(), // app_member 테이블의 입력한후 자동입력된pk 값
+          s.getNo(), // app_member 테이블에 입력한 후 자동 생성된 PK 값
           s.getPostNo(),
           s.getBasicAddress(),
           s.getDetailAddress(),
@@ -51,12 +51,12 @@ public class StudentDaoImpl implements StudentDao {
   public List<Student> findAll() {
     try (Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery("select"
-            + " m.member_id,"
-            + " m.name,"
-            + " m.email,"
-            + " m.tel,"
-            + " s.work,"
-            + " s.level"
+            + "  m.member_id,"
+            + "  m.name,"
+            + "  m.email,"
+            + "  m.tel,"
+            + "  s.work,"
+            + "  s.level"
             + " from app_student s"
             + "   inner join app_member m on s.member_id = m.member_id"
             + " order by"
@@ -74,7 +74,6 @@ public class StudentDaoImpl implements StudentDao {
 
         list.add(s);
       }
-
       return list;
 
     } catch (Exception e) {
@@ -86,19 +85,20 @@ public class StudentDaoImpl implements StudentDao {
   public Student findByNo(int no) {
     try (Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery("select"
-            + " m.member_id,"
-            + " m.name,"
-            + " m.email,"
-            + " m.tel,"
-            + " m.created_date, "
-            + " m.pst_no, "
-            + " m.bas_addr, "
-            + " m.det_addr, "
-            + " s.work,"
-            + " s.level"
+            + "  m.member_id,"
+            + "  m.name,"
+            + "  m.email,"
+            + "  m.tel,"
+            + "  m.created_date,"
+            + "  s.pst_no,"
+            + "  s.bas_addr,"
+            + "  s.det_addr,"
+            + "  s.work,"
+            + "  s.gender,"
+            + "  s.level"
             + " from app_student s"
             + "   inner join app_member m on s.member_id = m.member_id"
-            + " where member_id=" + no)) {
+            + " where s.member_id=" + no)) {
 
       if (rs.next()) {
         Student s = new Student();
@@ -127,21 +127,22 @@ public class StudentDaoImpl implements StudentDao {
   public List<Student> findByKeyword(String keyword) {
     try (Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery("select"
-            + " m.member_id,"
-            + " m.name,"
-            + " m.email,"
-            + " m.tel,"
-            + " s.work,"
-            + " s.level"
+            + "  m.member_id,"
+            + "  m.name,"
+            + "  m.email,"
+            + "  m.tel,"
+            + "  s.work,"
+            + "  s.level"
             + " from app_student s"
             + "   inner join app_member m on s.member_id = m.member_id"
-
-                + " where m.name like('%" + keyword + "%')"
-                + " or m.email like('%" + keyword + "%')"
-                + " or m.tel like('%" + keyword + "%')"
-                + " or s.bas_addr like('%" + keyword + "%')"
-                + " or s.det_addr like('%" + keyword + "%')"
-                + " order by m.member_id desc")) {
+            + " where"
+            + "   m.name like('%" + keyword + "%')"
+            + "   or m.email like('%" + keyword + "%')"
+            + "   or m.tel like('%" + keyword + "%')"
+            + "   or s.bas_addr like('%" + keyword + "%')"
+            + "   or s.det_addr like('%" + keyword + "%')"
+            + " order by"
+            + "   m.member_id desc")) {
 
       ArrayList<Student> list = new ArrayList<>();
       while (rs.next()) {
@@ -155,7 +156,6 @@ public class StudentDaoImpl implements StudentDao {
 
         list.add(s);
       }
-
       return list;
 
     } catch (Exception e) {
@@ -168,12 +168,12 @@ public class StudentDaoImpl implements StudentDao {
     try (Statement stmt = con.createStatement()) {
 
       String sql = String.format("update app_student set "
-          + " pst_no='%s',"
-          + " bas_addr='%s',"
-          + " det_addr='%s',"
-          + " work=%b,"
-          + " gender='%s',"
-          + " level=%d "
+          + "  pst_no='%s',"
+          + "  bas_addr='%s',"
+          + "  det_addr='%s',"
+          + "  work=%b,"
+          + "  gender='%s',"
+          + "  level=%d "
           + " where member_id=%d",
           s.getPostNo(),
           s.getBasicAddress(),
@@ -194,14 +194,15 @@ public class StudentDaoImpl implements StudentDao {
   public int delete(int no) {
     try (Statement stmt = con.createStatement()) {
 
-      String sql = String.format("delete from app_student where student_id=%d", no);
-
+      String sql = String.format("delete from app_student"
+          + " where member_id=%d", no);
       return stmt.executeUpdate(sql);
 
     } catch (Exception e) {
       throw new DaoException(e);
     }
   }
+
 
   public static void main(String[] args) throws Exception {
     Connection con = DriverManager.getConnection(
@@ -210,45 +211,41 @@ public class StudentDaoImpl implements StudentDao {
     StudentDaoImpl dao = new StudentDaoImpl(con);
 
     //    Student s = new Student();
-    //    s.setNo(5);
-    //    s.setPostNo("7777");
-    //    s.setBasicAddress("강남7");
-    //    s.setDetailAddress("107허");
-    //    s.setWorking(true);
-    //    s.setGender('M');
-    //    s.setLevel((byte)0);
-    //    //
-    //    dao.insert(s);
-    //    m.setEmail("aaa5@test.com");
-    //    m.setPassword("1111");
-    //    m.setTel("1111");
+    //    s.setNo(10);
+    //    s.setPostNo("11100");
+    //    s.setBasicAddress("강남대로10");
+    //    s.setDetailAddress("110호");
+    //    s.setWorking(false);
+    //    s.setGender('W');
+    //    s.setLevel((byte)1);
     //
-    //    dao.insert(m);
+    //    dao.insert(s);
 
     //    List<Student> list = dao.findAll();
     //    for (Student s : list) {
     //      System.out.println(s);
     //    }
 
-    Student s = dao.findByNo(5);
-    System.out.println(s);
+    //    Student s = dao.findByNo(10);
+    //    System.out.println(s);
 
-    //    List<Student> list = dao.findByKeyword("7");
+    //    List<Student> list = dao.findByKeyword("1111");
     //    for (Student s : list) {
     //      System.out.println(s);
     //    }
 
+
     //    Student s = new Student();
-    //    s.setNo(5);
-    //    s.setPostNo("1111");
-    //    s.setBasicAddress("강남10");
-    //    s.setDetailAddress("110허");
-    //    s.setWorking(false);
-    //    s.setGender('W');
-    //    s.setLevel((byte)1);
+    //    s.setNo(10);
+    //    s.setPostNo("33333");
+    //    s.setBasicAddress("강남대로10xx");
+    //    s.setDetailAddress("110호xx");
+    //    s.setWorking(true);
+    //    s.setGender('M');
+    //    s.setLevel((byte)2);
     //    System.out.println(dao.update(s));
 
-    //    System.out.println(dao.delete(3));
+    //    System.out.println(dao.delete(7));
 
     con.close();
   }

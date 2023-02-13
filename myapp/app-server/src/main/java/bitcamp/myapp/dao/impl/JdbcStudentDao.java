@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import bitcamp.myapp.dao.DaoException;
 import bitcamp.myapp.dao.StudentDao;
 import bitcamp.myapp.vo.Student;
@@ -41,7 +42,7 @@ public class JdbcStudentDao implements StudentDao {
   }
 
   @Override
-  public Student[] findAll() {
+  public List<Student> findAll() {
     try (Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery(
             "select student_id, name, tel, work, level"
@@ -60,10 +61,7 @@ public class JdbcStudentDao implements StudentDao {
         list.add(s);
       }
 
-      Student[] arr = new Student[list.size()];
-      list.toArray(arr);
-
-      return arr;
+      return list;
 
     } catch (Exception e) {
       throw new DaoException(e);
@@ -83,7 +81,7 @@ public class JdbcStudentDao implements StudentDao {
         s.setNo(rs.getInt("student_id"));
         s.setName(rs.getString("name"));
         s.setTel(rs.getString("tel"));
-        s.setCreatedDate(rs.getString("created_date"));
+        s.setCreatedDate(rs.getDate("created_date"));
         s.setPostNo(rs.getString("pst_no"));
         s.setBasicAddress(rs.getString("bas_addr"));
         s.setDetailAddress(rs.getString("det_addr"));
@@ -101,7 +99,7 @@ public class JdbcStudentDao implements StudentDao {
   }
 
   @Override
-  public Student[] findByKeyword(String keyword) {
+  public List<Student> findByKeyword(String keyword) {
     try (Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery(
             "select student_id, name, tel, work, level"
@@ -124,10 +122,7 @@ public class JdbcStudentDao implements StudentDao {
         list.add(s);
       }
 
-      Student[] arr = new Student[list.size()];
-      list.toArray(arr);
-
-      return arr;
+      return list;
 
     } catch (Exception e) {
       throw new DaoException(e);
@@ -135,7 +130,7 @@ public class JdbcStudentDao implements StudentDao {
   }
 
   @Override
-  public void update(Student s) {
+  public int update(Student s) {
     try (Statement stmt = con.createStatement()) {
 
       String sql = String.format(
@@ -153,7 +148,7 @@ public class JdbcStudentDao implements StudentDao {
               s.getLevel(),
               s.getNo());
 
-      stmt.executeUpdate(sql);
+      return stmt.executeUpdate(sql);
 
     } catch (Exception e) {
       throw new DaoException(e);
@@ -161,12 +156,12 @@ public class JdbcStudentDao implements StudentDao {
   }
 
   @Override
-  public boolean delete(Student s) {
+  public int delete(int no) {
     try (Statement stmt = con.createStatement()) {
 
-      String sql = String.format("delete from app_student where student_id=%d", s.getNo());
+      String sql = String.format("delete from app_student where student_id=%d", no);
 
-      return stmt.executeUpdate(sql) == 1;
+      return stmt.executeUpdate(sql);
 
     } catch (Exception e) {
       throw new DaoException(e);

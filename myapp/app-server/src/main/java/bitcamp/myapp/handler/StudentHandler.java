@@ -143,6 +143,8 @@ public class StudentHandler {
       } finally {
         con.setAutoCommit(true);
       }
+    } else {
+      streamTool.println("변경을 취소했습니다");
     }
     streamTool.send();
   }

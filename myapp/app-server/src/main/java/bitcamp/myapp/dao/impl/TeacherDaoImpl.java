@@ -1,6 +1,7 @@
 package bitcamp.myapp.dao.impl;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -9,35 +10,31 @@ import bitcamp.myapp.dao.DaoException;
 import bitcamp.myapp.dao.TeacherDao;
 import bitcamp.myapp.vo.Teacher;
 
-public class JdbcTeacherDao implements TeacherDao {
+public class TeacherDaoImpl implements TeacherDao {
 
   Connection con;
 
   // 의존객체 Connection 을 생성자에서 받는다.
-  public JdbcTeacherDao(Connection con) {
+  public TeacherDaoImpl(Connection con) {
     this.con = con;
   }
 
   @Override
-  public void insert(Teacher s) {
+  public void insert(Teacher t) {
     try (Statement stmt = con.createStatement()) {
 
       String sql = String.format("insert into app_teacher("
-          + " name,"
-          + " tel,"
-          + " email,"
-          + " degree,"
-          + " school,"
-          + " major,"
-          + " wage)"
-          + " values('%s','%s','%s',%d,'%s','%s',%d)",
-          s.getName(),
-          s.getTel(),
-          s.getEmail(),
-          s.getDegree(),
-          s.getSchool(),
-          s.getMajor(),
-          s.getWage());
+          + "  member_id,"
+          + "  degree,"
+          + "  school,"
+          + "  major,"
+          + "  wage)"
+          + " values('%s',%d,'%s','%s',%d)",
+          t.getNo(),
+          t.getDegree(),
+          t.getSchool(),
+          t.getMajor(),
+          t.getWage());
 
       stmt.executeUpdate(sql);
 
@@ -60,7 +57,7 @@ public class JdbcTeacherDao implements TeacherDao {
             + " from app_teacher t"
             + "   inner join app_member m on t.member_id = m.member_id"
             + " order by"
-            + "   t.name asc")) {
+            + "   m.name asc")) {
 
       ArrayList<Teacher> list = new ArrayList<>();
       while (rs.next()) {
@@ -89,9 +86,9 @@ public class JdbcTeacherDao implements TeacherDao {
         ResultSet rs = stmt.executeQuery("select"
             + " m.member_id,"
             + " m.name,"
+            + " m.email,"
             + " m.tel,"
             + " m.created_date,"
-            + " m.email,"
             + " t.degree,"
             + " t.school,"
             + " t.major,"
@@ -105,8 +102,8 @@ public class JdbcTeacherDao implements TeacherDao {
         s.setNo(rs.getInt("member_id"));
         s.setName(rs.getString("name"));
         s.setTel(rs.getString("tel"));
-        s.setCreatedDate(rs.getDate("created_date"));
         s.setEmail(rs.getString("email"));
+        s.setCreatedDate(rs.getDate("created_date"));
         s.setDegree(rs.getInt("degree"));
         s.setSchool(rs.getString("school"));
         s.setMajor(rs.getString("major"));
@@ -122,21 +119,57 @@ public class JdbcTeacherDao implements TeacherDao {
   }
 
   @Override
+  public List<Teacher> findByKeyword(String keyword) {
+    try (Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("select"
+            + " m.member_id,"
+            + " m.name,"
+            + " m.email,"
+            + " m.tel,"
+            + " t.degree,"
+            + " t.major,"
+            + " t.wage"
+            + " from app_teacher t"
+            + "   inner join app_member m on t.member_id = m.member_id"
+            + " where"
+            + "   m.name like('%" + keyword + "%')"
+            + "   or m.email like('%" + keyword + "%')"
+            + "   or m.tel like('%" + keyword + "%')"
+            + "   or t.school like('%" + keyword + "%')"
+            + " order by"
+            + "   m.member_id desc")) {
+
+      ArrayList<Teacher> list = new ArrayList<>();
+      while (rs.next()) {
+        Teacher s = new Teacher();
+        s.setNo(rs.getInt("member_id"));
+        s.setName(rs.getString("name"));
+        s.setEmail(rs.getString("email"));
+        s.setTel(rs.getString("tel"));
+        s.setDegree(rs.getInt("degree"));
+        s.setMajor(rs.getString("major"));
+        s.setWage(rs.getInt("wage"));
+
+        list.add(s);
+      }
+
+      return list;
+
+    } catch (Exception e) {
+      throw new DaoException(e);
+    }
+  }
+
+  @Override
   public int update(Teacher t) {
     try (Statement stmt = con.createStatement()) {
 
       String sql = String.format("update app_teacher set "
-          + " name='%s',"
-          + " tel='%s',"
-          + " email='%s',"
           + " degree=%d,"
           + " school='%s',"
           + " major='%s',"
           + " wage=%d "
           + " where member_id=%d",
-          t.getName(),
-          t.getTel(),
-          t.getEmail(),
           t.getDegree(),
           t.getSchool(),
           t.getMajor(),
@@ -162,6 +195,46 @@ public class JdbcTeacherDao implements TeacherDao {
     } catch (Exception e) {
       throw new DaoException(e);
     }
+  }
+  public static void main(String[] args) throws Exception {
+    Connection con = DriverManager.getConnection(
+        "jdbc:mariadb://localhost:3306/studydb", "study", "1111");
+
+    TeacherDaoImpl dao = new TeacherDaoImpl(con);
+
+    //    Teacher t = new Teacher();
+    //    t.setNo(1);
+    //    t.setDegree(1);
+    //    t.setSchool("서울");
+    //    t.setMajor("컴공");
+    //    t.setWage(1);
+    //    dao.insert(t);
+
+    List<Teacher> list = dao.findAll();
+    for (Teacher s : list) {
+      System.out.println(s);
+    }
+    //
+    //    Teacher s = dao.findByNo(1);
+    //    System.out.println(s);
+
+    //    List<Teacher> list = dao.findByKeyword("서");
+    //    for (Teacher s : list) {
+    //      System.out.println(s);
+    //    }
+
+
+    //    Teacher t = new Teacher();
+    //    t.setNo(1);
+    //    t.setDegree(2);
+    //    t.setSchool("인천");
+    //    t.setMajor("미술");
+    //    t.setWage(2);
+    //    System.out.println(dao.update(t));
+
+    //    System.out.println(dao.delete(1));
+
+    con.close();
   }
 }
 

@@ -1,18 +1,21 @@
 package bitcamp.myapp.dao;
 
+import java.util.List;
 import bitcamp.myapp.vo.Teacher;
 
 public interface TeacherDao {
 
   void insert(Teacher t);
 
-  Teacher[] findAll();
+  List<Teacher> findAll();
 
   Teacher findByNo(int no);
 
-  void update(Teacher t);
+  List<Teacher> findByKeyword(String keyword);
 
-  boolean delete(Teacher t);
+  int update(Teacher t);
+
+  int delete(int no);
 
 }
 

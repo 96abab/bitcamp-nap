@@ -1,45 +1,62 @@
 package bitcamp.myapp.handler;
 
+import java.sql.Connection;
+import java.util.List;
+import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.dao.TeacherDao;
 import bitcamp.myapp.vo.Teacher;
 import bitcamp.util.StreamTool;
 
 public class TeacherHandler {
 
+  private Connection con;
+  private MemberDao memberDao;
   private TeacherDao teacherDao;
   private String title;
 
-  public TeacherHandler(String title, TeacherDao teacherDao) {
+  public TeacherHandler(String title, Connection con, MemberDao memberDao, TeacherDao teacherDao) {
     this.title = title;
     this.teacherDao = teacherDao;
+    this.con = con;
+    this.memberDao = memberDao;
   }
 
   private void inputTeacher(StreamTool streamTool) throws Exception {
-    Teacher m = new Teacher();
-    m.setName(streamTool.promptString("이름? "));
-    m.setTel(streamTool.promptString("전화? "));
-    m.setEmail(streamTool.promptString("이메일? "));
-    m.setDegree(streamTool.promptInt("1. 고졸\n2. 전문학사\n3. 학사\n4. 석사\n5. 박사\n0. 기타\n학위? "));
-    m.setSchool(streamTool.promptString("학교? "));
-    m.setMajor(streamTool.promptString("전공? "));
-    m.setWage(streamTool.promptInt("강의료(시급)? "));
+    Teacher t = new Teacher();
+    t.setName(streamTool.promptString("이름? "));
+    t.setEmail(streamTool.promptString("이메일? "));
+    t.setPassword(streamTool.promptString("암호? "));
+    t.setTel(streamTool.promptString("전화? "));
+    t.setDegree(streamTool.promptInt("1. 고졸\n2. 전문학사\n3. 학사\n4. 석사\n5. 박사\n0. 기타\n학위? "));
+    t.setSchool(streamTool.promptString("학교? "));
+    t.setMajor(streamTool.promptString("전공? "));
+    t.setWage(streamTool.promptInt("강의료(시급)? "));
 
-    this.teacherDao.insert(m);
-
-    streamTool.println("입력했습니다!").send();
+    con.setAutoCommit(false);
+    try {
+      memberDao.insert(t);
+      teacherDao.insert(t);
+      con.commit();
+      streamTool.println("입력했습니다").send();
+    }catch (Exception e) {
+      con.rollback();
+      streamTool.println("입력실패").send();
+      e.printStackTrace();
+    } finally {
+      con.setAutoCommit(true);
+    }
   }
 
   private void printTeachers(StreamTool streamTool) throws Exception {
 
-    Object[] teachers = this.teacherDao.findAll();
+    List<Teacher> teachers = this.teacherDao.findAll();
 
     streamTool.println("번호\t이름\t전화\t학위\t전공\t시강료");
 
-    for (Object obj : teachers) {
-      Teacher m = (Teacher) obj;
+    for (Teacher t : teachers) {
       streamTool.printf("%d\t%s\t%s\t%s\t%s\t%d\n",
-          m.getNo(), m.getName(), m.getTel(),
-          getDegreeText(m.getDegree()), m.getMajor(), m.getWage());
+          t.getNo(), t.getName(), t.getTel(),
+          getDegreeText(t.getDegree()), t.getMajor(), t.getWage());
     }
     streamTool.send();
   }
@@ -54,7 +71,8 @@ public class TeacherHandler {
       return;
     }
 
-    streamTool.printf("    이름: %s\n", m.getName())
+    streamTool
+    .printf("    이름: %s\n", m.getName())
     .printf("    전화: %s\n", m.getTel())
     .printf("  이메일: %s\n", m.getEmail())
     .printf("    학위: %s\n", getDegreeText(m.getDegree()))
@@ -102,8 +120,19 @@ public class TeacherHandler {
 
     String str = streamTool.promptString("정말 변경하시겠습니까?(y/N) ");
     if (str.equalsIgnoreCase("Y")) {
-      this.teacherDao.update(m);
-      streamTool.println("변경했습니다.");
+      con.setAutoCommit(false);
+      try {
+        memberDao.update(m);
+        teacherDao.update(m);
+        con.commit();
+        streamTool.println("변경했습니다.");
+      }catch (Exception e) {
+        con.rollback();
+        streamTool.println("변경실패");
+        e.printStackTrace();
+      }finally {
+        con.setAutoCommit(true);
+      }
     } else {
       streamTool.println("변경 취소했습니다.");
     }
@@ -127,9 +156,18 @@ public class TeacherHandler {
       return;
     }
 
-    teacherDao.delete(m);
-
-    streamTool.println("삭제했습니다.").send();
+    con.setAutoCommit(false);
+    try {
+      teacherDao.delete(teacherNo);
+      memberDao.delete(teacherNo);
+      con.commit();
+      streamTool.println("삭제했습니다.").send();
+    }catch (Exception e) {
+      con.rollback();
+      streamTool.println("삭제 실패").send();
+    }finally {
+      con.setAutoCommit(true);
+    }
 
   }
 
