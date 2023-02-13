@@ -1,9 +1,11 @@
-package bitcamp.myapp.dao;
+package bitcamp.myapp.dao.impl;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import bitcamp.myapp.dao.DaoException;
+import bitcamp.myapp.dao.StudentDao;
 import bitcamp.myapp.vo.Student;
 
 public class JdbcStudentDao implements StudentDao {
@@ -104,10 +106,10 @@ public class JdbcStudentDao implements StudentDao {
         ResultSet rs = stmt.executeQuery(
             "select student_id, name, tel, work, level"
                 + " from app_student"
-                + "where name like('%" + keyword + "%')"
-                + " or tel like ('%" + keyword + "%')"
-                + " or bas_addr like ('%" + keyword + "%')"
-                + " or det_addr like ('%" + keyword + "%')"
+                + " where name like('%" + keyword + "%')"
+                + " or tel like('%" + keyword + "%')"
+                + " or bas_addr like('%" + keyword + "%')"
+                + " or det_addr like('%" + keyword + "%')"
                 + " order by student_id desc")) {
 
       ArrayList<Student> list = new ArrayList<>();

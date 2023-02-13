@@ -31,8 +31,6 @@ repositories {
 }
 
 dependencies {
-    // MariaDB JDBC
-    implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.2'
     implementation 'com.google.code.gson:gson:2.10.1'
     
     implementation 'com.google.guava:guava:31.1-jre'

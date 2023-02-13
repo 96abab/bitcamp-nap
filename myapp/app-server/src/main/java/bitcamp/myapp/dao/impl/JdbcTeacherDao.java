@@ -1,9 +1,11 @@
-package bitcamp.myapp.dao;
+package bitcamp.myapp.dao.impl;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import bitcamp.myapp.dao.DaoException;
+import bitcamp.myapp.dao.TeacherDao;
 import bitcamp.myapp.vo.Teacher;
 
 public class JdbcTeacherDao implements TeacherDao {
@@ -91,44 +93,6 @@ public class JdbcTeacherDao implements TeacherDao {
       }
 
       return null;
-
-    } catch (Exception e) {
-      throw new DaoException(e);
-    }
-  }
-
-  @Override
-  public Teacher[] findByKeyword(String keyword) {
-    try (Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery(
-            "select teacher_id, name, tel, degree, major, wage"
-                + " from app_teacher"
-                + "where name like('%" + keyword + "%')"
-                + " or tel like('%" + keyword + "%')"
-                + " or email like('%" + keyword + "%')"
-                + " or degree like('%" + keyword + "%')"
-                + " or school like('%" + keyword + "%')"
-                + " or major like('%" + keyword + "%')"
-                + " or wage like('%" + keyword + "%')"
-                + " order by teacher_id desc")) {
-
-      ArrayList<Teacher> list = new ArrayList<>();
-      while (rs.next()) {
-        Teacher s = new Teacher();
-        s.setNo(rs.getInt("teacher_id"));
-        s.setName(rs.getString("name"));
-        s.setTel(rs.getString("tel"));
-        s.setDegree(rs.getInt("degree"));
-        s.setMajor(rs.getString("major"));
-        s.setWage(rs.getInt("wage"));
-
-        list.add(s);
-      }
-
-      Teacher[] arr = new Teacher[list.size()];
-      list.toArray(arr);
-
-      return arr;
 
     } catch (Exception e) {
       throw new DaoException(e);

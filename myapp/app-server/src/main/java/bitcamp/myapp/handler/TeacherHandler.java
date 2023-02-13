@@ -14,7 +14,7 @@ public class TeacherHandler {
     this.teacherDao = teacherDao;
   }
 
-  private void inputTeacher(StreamTool streamTool) throws Exception  {
+  private void inputTeacher(StreamTool streamTool) throws Exception {
     Teacher m = new Teacher();
     m.setName(streamTool.promptString("이름? "));
     m.setTel(streamTool.promptString("전화? "));
@@ -25,7 +25,8 @@ public class TeacherHandler {
     m.setWage(streamTool.promptInt("강의료(시급)? "));
 
     this.teacherDao.insert(m);
-    streamTool.println("입력했습니다").send();
+
+    streamTool.println("입력했습니다!").send();
   }
 
   private void printTeachers(StreamTool streamTool) throws Exception {
@@ -81,7 +82,7 @@ public class TeacherHandler {
     Teacher old = this.teacherDao.findByNo(teacherNo);
 
     if (old == null) {
-      streamTool.println("해당 번호의 강사가 없습니다.").send();
+      streamTool.println("해당 번호의 강사가 없습니다.");
       return;
     }
 
@@ -107,6 +108,7 @@ public class TeacherHandler {
       streamTool.println("변경 취소했습니다.");
     }
     streamTool.send();
+
   }
 
   private void deleteTeacher(StreamTool streamTool) throws Exception {
@@ -131,31 +133,12 @@ public class TeacherHandler {
 
   }
 
-  private void searchTeacher(StreamTool streamTool) throws Exception {
-    String keyword = streamTool.promptString("검색어? ");
-
-    Teacher[] teachers = this.teacherDao.findByKeyword(keyword);
-
-    streamTool.println("번호\t이름\t전화\t학위\t전공\t시강료");
-
-    for (Teacher m : teachers) {
-      streamTool.printf("%d\t%s\t%s\t%s\t%s\t%d\n",
-          m.getNo(), m.getName(), m.getTel(),
-          getDegreeText(m.getDegree()), m.getMajor(), m.getWage());
-    }
-    streamTool.send();
-  }
-
-
-  public void service(StreamTool streamTool) throws Exception{
-
+  public void service(StreamTool streamTool) throws Exception {
     menu(streamTool);
 
-
-
     while (true) {
-      String command = streamTool.readString();
 
+      String command = streamTool.readString();
       if (command.equals("menu")) {
         menu(streamTool);
         continue;
@@ -164,29 +147,32 @@ public class TeacherHandler {
       int menuNo;
       try {
         menuNo = Integer.parseInt(command);
-      }catch (Exception e) {
-        streamTool.println("메뉴 번호가 옳지 않습니다").println().send();
+      } catch (Exception e) {
+        streamTool.println("메뉴 번호가 옳지 않습니다!").println().send();
         continue;
       }
+
       try {
         switch (menuNo) {
-          case 0: return;
+          case 0:
+            streamTool.println("메인화면으로 이동!").send();
+            return;
           case 1: this.inputTeacher(streamTool); break;
           case 2: this.printTeachers(streamTool); break;
           case 3: this.printTeacher(streamTool); break;
           case 4: this.modifyTeacher(streamTool); break;
           case 5: this.deleteTeacher(streamTool); break;
-          case 6: this.searchTeacher(streamTool); break;
           default:
-            System.out.println("잘못된 메뉴 번호 입니다.");
+            streamTool.println("잘못된 메뉴 번호 입니다.").send();
         }
-      }catch (Exception e) {
-        streamTool.printf("명령 실행중 오류 발생 - %s : %s\n",
+      } catch (Exception e) {
+        streamTool.printf("명령 실행 중 오류 발생! - %s : %s\n",
             e.getMessage(),
             e.getClass().getSimpleName()).send();
       }
     }
   }
+
   void menu(StreamTool streamTool) throws Exception {
     streamTool.printf("[%s]\n", this.title)
     .println("1. 등록")
@@ -194,7 +180,6 @@ public class TeacherHandler {
     .println("3. 조회")
     .println("4. 변경")
     .println("5. 삭제")
-    .println("6. 검색")
     .println("0. 이전")
     .send();
   }

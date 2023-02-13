@@ -10,8 +10,6 @@ public interface TeacherDao {
 
   Teacher findByNo(int no);
 
-  Teacher[] findByKeyword(String keyword);
-
   void update(Teacher t);
 
   boolean delete(Teacher t);
