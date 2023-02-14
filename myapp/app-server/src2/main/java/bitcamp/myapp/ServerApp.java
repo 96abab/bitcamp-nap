@@ -44,14 +44,14 @@ public class ServerApp {
 
     // Mybatis API 사용 준비
     // 1) Mybatis 설정 파일 준비
-    //    => resources/bitcamp/myapp/confif/mybatis-config.xml
+    //    => resources/bitcamp/myapp/conf/mybatis-config.xml
 
     // 2) SQL Mapper 파일 준비
     //    => resources/bitcamp/myapp/mapper/BoardMapper.xml
 
     // 3) Mybatis 설정 파일을 읽을 때 사용할 입력 스트림 객체 준비
     InputStream mybatisConfigInputStream = Resources.getResourceAsStream(
-        "bitcamp/myapp/config/mybatis-config.xml");
+        "bitcamp/myapp/mapper/BoardMapper.xml");
 
     // 4) SqlSessionFactoryBuilder 객체 준비
     SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();

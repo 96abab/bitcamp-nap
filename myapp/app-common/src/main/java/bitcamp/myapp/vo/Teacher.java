@@ -9,15 +9,12 @@ public class Teacher extends Member implements java.io.Serializable {
   private int wage;
 
 
-
-
-
-
   @Override
   public String toString() {
     return "Teacher [degree=" + degree + ", school=" + school + ", major=" + major + ", wage="
         + wage + ", getNo()=" + getNo() + ", getName()=" + getName() + ", getEmail()=" + getEmail()
-        + ", getTel()=" + getTel() + ", getCreatedDate()=" + getCreatedDate() + "]";
+        + ", getPassword()=" + getPassword() + ", getTel()=" + getTel() + ", getCreatedDate()="
+        + getCreatedDate() + "]";
   }
   public int getDegree() {
     return degree;
@@ -43,11 +40,5 @@ public class Teacher extends Member implements java.io.Serializable {
   public void setWage(int wage) {
     this.wage = wage;
   }
-
-  // Factory Method 패턴 + Information Expert 패턴
-
-  // Information Expert 패턴
-
-
 
 }
