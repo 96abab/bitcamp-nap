@@ -14,7 +14,6 @@ public interface MemberDao {
   int update(Member m);
 
   int delete(int no);
-
 }
 
 

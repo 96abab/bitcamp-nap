@@ -9,6 +9,8 @@ public interface TeacherDao {
   Teacher findByNo(int no);
   int update(Teacher t);
   int delete(int no);
+
+
 }
 
 
