@@ -8,7 +8,10 @@
     <id column="member_id" property="no"/>
     <result column="name" property="name"/>
     <result column="email" property="email"/>
+<<<<<<< HEAD
     <result column="pwd" property="password"/>
+=======
+>>>>>>> ddad0d9c35f9f7d3276eb3d38b2ad20ff4def4c6
     <result column="tel" property="tel"/>
     <result column="created_date" property="createdDate"/>
   </resultMap>

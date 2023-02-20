@@ -58,8 +58,11 @@
     where m.member_id=#{no}
   </select>
   
+<<<<<<< HEAD
   
   
+=======
+>>>>>>> ddad0d9c35f9f7d3276eb3d38b2ad20ff4def4c6
   <update id="update" parameterType="teacher">
     update app_teacher set
       degree=#{degree},
