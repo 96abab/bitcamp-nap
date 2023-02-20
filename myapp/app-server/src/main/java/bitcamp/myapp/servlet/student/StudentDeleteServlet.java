@@ -1,38 +1,31 @@
 package bitcamp.myapp.servlet.student;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.dao.StudentDao;
-import bitcamp.myapp.vo.Student;
-import bitcamp.util.BitcampSqlSessionFactory;
-import bitcamp.util.DaoGenerator;
+import bitcamp.util.TransactionManager;
 
 @WebServlet("/student/delete")
 public class StudentDeleteServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
+  private TransactionManager txManager;
+  private MemberDao memberDao;
   private StudentDao studentDao;
 
-  public StudentDeleteServlet() {
-    try {
-      InputStream mybatisConfigInputStream = Resources.getResourceAsStream(
-          "bitcamp/myapp/config/mybatis-config.xml");
-      SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
-      BitcampSqlSessionFactory sqlSessionFactory = new BitcampSqlSessionFactory(
-          builder.build(mybatisConfigInputStream));
-      studentDao = new DaoGenerator(sqlSessionFactory).getObject(StudentDao.class);
-
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+  @Override
+  public void init() {
+    ServletContext ctx = getServletContext();
+    txManager = (TransactionManager) ctx.getAttribute("txManager");
+    memberDao = (MemberDao) ctx.getAttribute("memberDao");
+    studentDao = (StudentDao) ctx.getAttribute("studentDao");
   }
 
   @Override
@@ -40,7 +33,6 @@ public class StudentDeleteServlet extends HttpServlet {
       throws ServletException, IOException {
 
     int studentNo = Integer.parseInt(request.getParameter("no"));
-    String password = request.getParameter("password");
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -54,17 +46,20 @@ public class StudentDeleteServlet extends HttpServlet {
     out.println("<body>");
     out.println("<h1>학생</h1>");
 
-    Student old = studentDao.findByNo(studentNo);
+    txManager.startTransaction();
+    try {
+      if (studentDao.delete(studentNo) == 1 &&
+          memberDao.delete(studentNo) == 1) {
+        txManager.commit();
+        out.println("<p>삭제했습니다.</p>");
 
-    if (old == null) {
-      out.println("<p>해당 번호의 학생이 없습니다.</p>");
-
-    } else if (!old.getPassword().equals(password)) {
-      out.println("<p>암호가 맞지 않습니다!</p>");
-
-    } else {
-      this.studentDao.delete(studentNo);
-      out.println("<p>삭제했습니다.</p>");
+      } else {
+        out.println("<p>해당 번호의 학생이 없습니다.</p>");
+      }
+    } catch (Exception e) {
+      txManager.rollback();
+      out.println("<p>삭제 실패입니다.</p>");
+      e.printStackTrace();
     }
 
     out.println("</body>");
