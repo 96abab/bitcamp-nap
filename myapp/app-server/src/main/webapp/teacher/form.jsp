@@ -1,8 +1,5 @@
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,8 +7,8 @@
 <title>비트캠프 - NCP 1기</title>
 </head>
 <body>
-<h1>강사</h1>
-<form action='insert.jsp' method='post'>
+<h1>강사(JSP + MVC2)</h1>
+<form action='insert' method='post'>
 <table border='1'>
 <tr>
   <th>이름</th>
@@ -36,13 +33,13 @@
 <tr>
   <th>학위</th>
   <td><select name='degree'>
-<option value='1'>고졸</option>
-<option value='2'>전문학사</option>
-<option value='3'>학사</option>
-<option value='4'>석사</option>
-<option value='5'>박사</option>
-<option value='0'>기타</option>
-</select></td>
+      <option value='1'>고졸</option>
+      <option value='2'>전문학사</option>
+      <option value='3'>학사</option>
+      <option value='4'>석사</option>
+      <option value='5'>박사</option>
+      <option value='0'>기타</option>
+      </select></td>
 </tr>
 
 <tr>
@@ -71,9 +68,11 @@
 
 <script>
 document.querySelector('#btn-cancel').onclick = function() {
-  location.href = 'list.jsp';
+  location.href = 'list';
 }
 </script>
 
 </body>
 </html>
+
+
