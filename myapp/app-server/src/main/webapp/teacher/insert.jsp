@@ -10,12 +10,14 @@
 </head>
 <body>
 <h1>강사(JSP + MVC2 + EL + JSTL)</h1>
-<c:if test="${not empty teacher}">
+<c:choose>
+  <c:when test="${empty error}">
       <p>입력했습니다.</p>
-</c:if>
-<c:if test="${empty teacher}">
+  </c:when>
+  <c:otherwise>
       <p>입력 실패입니다.</p>
-</c:if>
+  </c:otherwise>  
+</c:choose>
 </body>
 </html>
 

@@ -1,3 +1,4 @@
+<%@page import="bitcamp.myapp.vo.Teacher"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -12,11 +13,11 @@
 <c:if test="${empty teacher}">
   <p>해당 번호의 강사가 없습니다.</p>
   <div>
-  <button id='btn-list' type='button'>목록</button>
+    <button id='btn-list' type='button'>목록</button>
   </div>
 </c:if>
 
-<c:if test="${not empty teacher}"> 
+<c:if test="${not empty teacher}">
   <form id='teacher-form' action='update' method='post'>
 
   <table border='1'>
@@ -79,17 +80,20 @@
   </tr>
 
   </table>
-<div>
-  <button id='btn-list' type='button'>목록</button>
-  <button>변경</button>
-  <button id='btn-delete' type='button'>삭제</button>
-</div>
-</form>
+	<div>
+	  <button id='btn-list' type='button'>목록</button>
+	  <button>변경</button>
+	  <button id='btn-delete' type='button'>삭제</button>
+	</div>
+	
+	</form>
 </c:if>
+
 <script>
 document.querySelector('#btn-list').onclick = function() {
   location.href = 'list';
 }
+
 <c:if test="${not empty teacher}">
 document.querySelector('#btn-delete').onclick = function() {
   var form = document.querySelector('#teacher-form');

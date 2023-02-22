@@ -11,18 +11,15 @@
 <body>
 <h1>강사(JSP + MVC2 + EL + JSTL)</h1>
 <c:choose>
-<c:when test="${empty error}">
-    <p>삭제했습니다.</p>
-</c:when>
-<c:when test="${error == 'data'}">
-    <p>해당 번호의 강사가 없습니다.</p>
-</c:when>
-  <c:when test="${error == 'password'}">
-    <p>암호가 맞지 않습니다!</p>
+  <c:when test="${empty error}">
+      <p>삭제했습니다.</p>
   </c:when>
-    <c:otherwise>
-    <p>삭제 실패입니다.</p>
-    </c:otherwise>
+  <c:when test="${error == 'data'}">
+      <p>해당 번호의 강사가 없습니다.</p>
+  </c:when>
+  <c:otherwise>
+      <p>삭제 실패입니다.</p>
+  </c:otherwise>  
 </c:choose>
 </body>
 </html>
