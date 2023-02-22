@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="bitcamp.myapp.dao.StudentDao"%>
+<%@page import="java.lang.Long" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
@@ -69,8 +71,9 @@
 
   <tr>
     <th>성별</th>
-    <td><input type='radio' name='gender' value='M' ${student.setGender(request.getParameter("gender").charAt(0)) == 'M' ? "checked" : ""}>남
-    <input type='radio' name='gender' value='W' ${student.setGender(request.getParameter("gender").charAt(0)) == 'W' ? "checked" : ""}> 여</td>
+   <td><input type='radio' name='gender' value='M' ${student.gender == 'M'.charAt(0) ? "checked" : ""}>남
+    <input type='radio' name='gender' value='W' ${student.gender == 'W'.charAt(0) ? "checked" : ""}> 여</td>
+
 
   </tr>
 
