@@ -21,14 +21,13 @@ public class LoginFormServlet extends HttpServlet {
     if (cookies != null) {
       for (Cookie cookie : cookies) {
         if (cookie.getName().equals("email")) {
-
-
           request.setAttribute("email", cookie.getValue());
-          // => JSP에서는 ${email}로 값을 꺼낸다
+          // => JSP에서는 ${email}로 값을 꺼낸다.
           break;
         }
       }
     }
+
     request.getRequestDispatcher("/auth/form.jsp").forward(request, response);
   }
 }
