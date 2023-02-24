@@ -7,18 +7,17 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import bitcamp.myapp.controller.PageController;
 import bitcamp.myapp.service.BoardService;
 import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.BoardFile;
 import bitcamp.myapp.vo.Member;
 
-public class BoardUpdateServlet implements PageController {
+public class BoardUpdateController implements PageController {
 
   private BoardService boardService;
 
 
-  public BoardUpdateServlet(BoardService boardService) {
+  public BoardUpdateController(BoardService boardService) {
     this.boardService = boardService;
   }
 
@@ -61,7 +60,7 @@ public class BoardUpdateServlet implements PageController {
 
     }  catch (Exception e) {
       e.printStackTrace();
-      request.setAttribute("error", "data");
+      return "data";
     }
 
     return "/board/update.jsp";

@@ -5,25 +5,23 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import bitcamp.myapp.dao.BoardFileDao;
+import bitcamp.myapp.service.BoardService;
 import bitcamp.myapp.vo.BoardFile;
 
 @WebServlet("/download/boardfile")
 public class DownloadServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
-  private BoardFileDao boardFileDao;
+  private BoardService boardService;
 
   @Override
   public void init() {
-    ServletContext ctx = getServletContext();
-    boardFileDao = (BoardFileDao) ctx.getAttribute("boardFileDao");
+    boardService = (BoardService) getServletContext().getAttribute("boardService");
   }
 
   @Override
@@ -35,7 +33,7 @@ public class DownloadServlet extends HttpServlet {
       int fileNo = Integer.parseInt(request.getParameter("fileNo"));
 
       // 파일 번호를 이용하여 파일 정보를 가져온다.
-      BoardFile boardFile = boardFileDao.findByNo(fileNo);
+      BoardFile boardFile = boardService.getfile(fileNo);
       if (boardFile == null) {
         throw new RuntimeException("파일 정보 없음!");
       }

@@ -10,6 +10,7 @@ public interface BoardFileDao {
   BoardFile findByNo(int boardFileNo);
   int delete(int boardFileNo);
   int deleteOfBoard(int boardNo);
+  void getfile(int fileNo);
 }
 
 
