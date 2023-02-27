@@ -21,7 +21,6 @@ public class DefaultStudentService implements StudentService {
     this.studentDao = studentDao;
   }
 
-  @Override
   public void add(Student student) {
     txManager.startTransaction();
     try {
@@ -35,17 +34,14 @@ public class DefaultStudentService implements StudentService {
     }
   }
 
-  @Override
   public List<Student> list(String keyword) {
     return studentDao.findAll(keyword);
   }
 
-  @Override
   public Student get(int no) {
     return studentDao.findByNo(no);
   }
 
-  @Override
   public Student get(String email, String password) {
     Map<String,Object> paramMap = new HashMap<>();
     paramMap.put("email", email);
@@ -54,7 +50,6 @@ public class DefaultStudentService implements StudentService {
     return studentDao.findByEmailAndPassword(paramMap);
   }
 
-  @Override
   public void update(Student student) {
     try {
       txManager.startTransaction();
@@ -70,7 +65,6 @@ public class DefaultStudentService implements StudentService {
     }
   }
 
-  @Override
   public void delete(int no) {
     try {
       txManager.startTransaction();

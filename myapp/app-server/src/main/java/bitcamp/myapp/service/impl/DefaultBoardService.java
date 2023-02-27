@@ -8,7 +8,7 @@ import bitcamp.myapp.vo.Board;
 import bitcamp.myapp.vo.BoardFile;
 import bitcamp.util.TransactionManager;
 
-public class DefaultBoardService implements BoardService{
+public class DefaultBoardService implements BoardService {
 
   private TransactionManager txManager;
   private BoardDao boardDao;
@@ -87,17 +87,16 @@ public class DefaultBoardService implements BoardService{
     }
   }
 
-  @Override
-  public void deleteFile(int fileNo) {
-    boardFileDao.delete(fileNo);
 
-
-  }
   @Override
-  public BoardFile getfile(int fileNo) {
+  public BoardFile getFile(int fileNo) {
     return boardFileDao.findByNo(fileNo);
   }
 
+  @Override
+  public void deleteFile(int fileNo) {
+    boardFileDao.delete(fileNo);
+  }
 }
 
 
