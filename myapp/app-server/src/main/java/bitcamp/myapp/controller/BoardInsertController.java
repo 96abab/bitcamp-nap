@@ -32,7 +32,7 @@ public class BoardInsertController implements PageController {
       ServletFileUpload upload = new ServletFileUpload(factory);
       List<FileItem> items = upload.parseRequest(request);
       Map<String,String> paramMap = new HashMap<>();
-      List<FileItem> files = new ArrayList<>();
+      List<FileItem> files = new ArrayList<>(); 
 
       for (FileItem item : items) {
         if (item.isFormField()) {

@@ -17,6 +17,18 @@ import bitcamp.myapp.controller.BoardViewController;
 import bitcamp.myapp.controller.LoginController;
 import bitcamp.myapp.controller.LoginFormController;
 import bitcamp.myapp.controller.LogoutController;
+import bitcamp.myapp.controller.StudentDeleteController;
+import bitcamp.myapp.controller.StudentFormController;
+import bitcamp.myapp.controller.StudentInsertController;
+import bitcamp.myapp.controller.StudentListController;
+import bitcamp.myapp.controller.StudentUpdateController;
+import bitcamp.myapp.controller.StudentViewController;
+import bitcamp.myapp.controller.TeacherDeleteController;
+import bitcamp.myapp.controller.TeacherFormController;
+import bitcamp.myapp.controller.TeacherInsertController;
+import bitcamp.myapp.controller.TeacherListController;
+import bitcamp.myapp.controller.TeacherUpdateController;
+import bitcamp.myapp.controller.TeacherViewController;
 import bitcamp.myapp.dao.BoardDao;
 import bitcamp.myapp.dao.BoardFileDao;
 import bitcamp.myapp.dao.MemberDao;
@@ -66,6 +78,20 @@ public class ContextLoaderListener implements ServletContextListener {
       BoardDeleteController boardDeleteController = new BoardDeleteController(boardService);
       BoardViewController boardViewController = new BoardViewController(boardService);
       BoardUpdateController boardUpdateController = new BoardUpdateController(boardService);
+
+      TeacherListController teacherListController = new TeacherListController(teacherService);
+      TeacherFormController teacherFormController = new TeacherFormController();
+      TeacherInsertController teacherInsertController = new TeacherInsertController(teacherService);
+      TeacherDeleteController teacherDeleteController = new TeacherDeleteController(teacherService);
+      TeacherViewController teacherViewController = new TeacherViewController(teacherService);
+      TeacherUpdateController teacherUpdateController = new TeacherUpdateController(teacherService);
+
+      StudentListController studentListController = new StudentListController(studentService);
+      StudentFormController studentFormController = new StudentFormController();
+      StudentInsertController studentInsertController = new StudentInsertController(studentService);
+      StudentDeleteController studentDeleteController = new StudentDeleteController(studentService);
+      StudentViewController studentViewController = new StudentViewController(studentService);
+      StudentUpdateController studentUpdateController = new StudentUpdateController(studentService);
       // 서블릿 컨텍스트 보관소를 알아낸다.
       ServletContext ctx = sce.getServletContext();
 
@@ -81,6 +107,21 @@ public class ContextLoaderListener implements ServletContextListener {
       ctx.setAttribute("/board/delete", boardDeleteController);
       ctx.setAttribute("/board/view", boardViewController);
       ctx.setAttribute("/board/update", boardUpdateController);
+
+      ctx.setAttribute("/teacher/list", teacherListController);
+      ctx.setAttribute("/teacher/form", teacherFormController);
+      ctx.setAttribute("/teacher/insert", teacherInsertController);
+      ctx.setAttribute("/teacher/delete", teacherDeleteController);
+      ctx.setAttribute("/teacher/view", teacherViewController);
+      ctx.setAttribute("/teacher/update", teacherUpdateController);
+
+      ctx.setAttribute("/student/list", studentListController);
+      ctx.setAttribute("/student/form", studentFormController);
+      ctx.setAttribute("/student/insert", studentInsertController);
+      ctx.setAttribute("/student/delete", studentDeleteController);
+      ctx.setAttribute("/student/view", studentViewController);
+      ctx.setAttribute("/student/update", studentUpdateController);
+
 
     } catch (Exception e) {
       System.out.println("웹 애플리케이션 자원을 준비하는 중에 오류 발생!");
