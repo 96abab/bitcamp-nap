@@ -12,7 +12,7 @@
         <property name="tires">
             <array> <!-- list 태그 대신에 array 태그를 사용해도 된다. -->
                 <bean class="com.eomcs.spring.ioc.ex05.b.Tire" 
-                      p:maker="금호타이어" p:width="180"/>
+                      p:maker="금호타이어" p:width="180" p:ratio="200" p:wheel="300"/>
                 <bean class="com.eomcs.spring.ioc.ex05.b.Tire" 
                       p:maker="금호타이어" p:width="180"/>
                 <bean class="com.eomcs.spring.ioc.ex05.b.Tire" 

@@ -1,21 +1,22 @@
 package bitcamp.myapp.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import bitcamp.myapp.service.StudentService;
 import bitcamp.myapp.vo.Student;
-import bitcamp.util.Controller;
-import bitcamp.util.RequestMapping;
-import bitcamp.util.RequestParam;
 
 @Controller
+public class StudentController {
 
-public class StudentController  {
+  @Autowired private StudentService studentService;
 
-  private StudentService studentService;
 
-  public StudentController(StudentService studentService) {
-    this.studentService = studentService;
+  @RequestMapping("/student/form")
+  public String form() {
+    return "/student/form.jsp";
   }
 
   @RequestMapping("/student/insert")
@@ -30,8 +31,7 @@ public class StudentController  {
       @RequestParam("working") boolean working,
       @RequestParam("gender") char gender,
       @RequestParam("level") byte level,
-      HttpServletRequest request
-      ) {
+      HttpServletRequest request) {
 
     Student student = new Student();
     student.setName(name);
@@ -62,36 +62,17 @@ public class StudentController  {
     return "/student/list.jsp";
   }
 
-  @RequestMapping("/student/form")
-  public String form() {
-    return "/student/form.jsp";
-  }
-
-  @RequestMapping("/student/delete")
-  public String delete(
-      @RequestParam("no") int no,
-      HttpServletRequest request) {
-    try {
-      studentService.delete(no);
-    } catch (Exception e) {
-      e.printStackTrace();
-      request.setAttribute("error", "other");
-    }
-    return "/student/delete.jsp";
-  }
-
   @RequestMapping("/student/view")
   public String view(
       @RequestParam("no") int no,
       HttpServletRequest request) {
-
-    request.setAttribute("student",
-        studentService.get(no));
+    request.setAttribute("student", studentService.get(no));
     return"/student/view.jsp";
   }
 
   @RequestMapping("/student/update")
   public String update(
+      @RequestParam("no") int no,
       @RequestParam("name") String name,
       @RequestParam("email") String email,
       @RequestParam("password") String password,
@@ -102,10 +83,10 @@ public class StudentController  {
       @RequestParam("working") boolean working,
       @RequestParam("gender") char gender,
       @RequestParam("level") byte level,
-      HttpServletRequest request,
-      HttpServletResponse response) {
+      HttpServletRequest request) {
 
     Student student = new Student();
+    student.setNo(no);
     student.setName(name);
     student.setEmail(email);
     student.setPassword(password);
@@ -126,4 +107,16 @@ public class StudentController  {
     return "/student/update.jsp";
   }
 
+  @RequestMapping("/student/delete")
+  public String delete(
+      @RequestParam("no") int no,
+      HttpServletRequest request) {
+    try {
+      studentService.delete(no);
+    } catch (Exception e) {
+      e.printStackTrace();
+      request.setAttribute("error", "other");
+    }
+    return "/student/delete.jsp";
+  }
 }

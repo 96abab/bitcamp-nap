@@ -2,20 +2,22 @@ package bitcamp.myapp.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import bitcamp.myapp.service.TeacherService;
 import bitcamp.myapp.vo.Teacher;
-import bitcamp.util.Controller;
-import bitcamp.util.RequestMapping;
-import bitcamp.util.RequestParam;
 
 @Controller
 public class TeacherController {
 
+  @Autowired private TeacherService teacherService;
 
-  private TeacherService teacherService;
 
-  public TeacherController(TeacherService teacherService) {
-    this.teacherService = teacherService;
+  @RequestMapping("/teacher/form")
+  public String form() {
+    return "/teacher/form.jsp";
   }
 
   @RequestMapping("/teacher/insert")
@@ -35,7 +37,6 @@ public class TeacherController {
     teacher.setEmail(email);
     teacher.setPassword(password);
     teacher.setTel(tel);
-
     teacher.setDegree(degree);
     teacher.setSchool(school);
     teacher.setMajor(major);
@@ -57,18 +58,12 @@ public class TeacherController {
     return "/teacher/list.jsp";
   }
 
-  @RequestMapping("/teacher/form")
-  public String form() {
-    return "/teacher/form.jsp";
-  }
-
   @RequestMapping("/teacher/view")
   public String view(
       @RequestParam("no") int no,
-      HttpServletRequest request,
-      HttpServletResponse response) {
-    request.setAttribute("teacher",
-        teacherService.get(no));
+      HttpServletRequest request, HttpServletResponse response) {
+
+    request.setAttribute("teacher", teacherService.get(no));
     return "/teacher/view.jsp";
   }
 
@@ -108,19 +103,14 @@ public class TeacherController {
   @RequestMapping("/teacher/delete")
   public String delete(
       @RequestParam("no") int no,
-      HttpServletRequest request,
-      HttpServletResponse response) {
-
+      HttpServletRequest request) {
     try {
-      teacherService.delete(no);
+      teacherService.delete(Integer.parseInt(request.getParameter("no")));
     } catch (Exception e) {
       e.printStackTrace();
       request.setAttribute("error", "other");
     }
     return "/teacher/delete.jsp";
   }
-
-
-
 
 }

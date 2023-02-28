@@ -9,10 +9,8 @@ public class RequestHandlerMapping {
   public RequestHandlerMapping() {
   }
 
-
   public RequestHandlerMapping(Object controller, Method method) {
     this.controller = controller;
     this.method = method;
   }
-
 }

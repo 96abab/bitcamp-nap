@@ -4,24 +4,20 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import bitcamp.myapp.service.StudentService;
 import bitcamp.myapp.service.TeacherService;
 import bitcamp.myapp.vo.Member;
-import bitcamp.util.Controller;
-import bitcamp.util.RequestMapping;
-import bitcamp.util.RequestParam;
 
 @Controller
+public class AuthController {
 
-public class AuthController  {
+  @Autowired private StudentService studentService;
+  @Autowired private TeacherService teacherService;
 
-  private StudentService studentService;
-  private TeacherService teacherService;
-
-  public AuthController(StudentService studentService, TeacherService teacherService) {
-    this.studentService = studentService;
-    this.teacherService = teacherService;
-  }
 
   @RequestMapping("/auth/form")
   public String form() {
@@ -37,7 +33,6 @@ public class AuthController  {
       HttpServletRequest request,
       HttpServletResponse response,
       HttpSession session) {
-
 
     if (saveEmail != null) {
       Cookie cookie = new Cookie("email", email);
@@ -62,7 +57,7 @@ public class AuthController  {
 
     if (member != null) {
       session.setAttribute("loginUser", member);
-      return "redirect:../";
+      return "redirect:../../";
     } else {
       request.setAttribute("error", "loginfail");
       return "/auth/form.jsp";
@@ -73,7 +68,7 @@ public class AuthController  {
   @RequestMapping("/auth/logout")
   public String logout(HttpSession session) {
     session.invalidate();
-    return "redirect:../";
+    return "redirect:../../";
   }
 
   @RequestMapping("/auth/fail")
