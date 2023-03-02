@@ -18,10 +18,9 @@ public class AuthController {
   @Autowired private StudentService studentService;
   @Autowired private TeacherService teacherService;
 
-
   @RequestMapping("/auth/form")
   public String form() {
-    return "/auth/form.jsp";
+    return "auth/form";
   }
 
   @RequestMapping("/auth/login")
@@ -60,7 +59,7 @@ public class AuthController {
       return "redirect:../../";
     } else {
       request.setAttribute("error", "loginfail");
-      return "/auth/form.jsp";
+      return "auth/form";
     }
 
   }
@@ -73,7 +72,7 @@ public class AuthController {
 
   @RequestMapping("/auth/fail")
   public String fail() {
-    return "/auth/fail.jsp";
+    return "auth/fail";
   }
 
 }

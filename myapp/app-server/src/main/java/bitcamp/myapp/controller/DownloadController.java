@@ -18,7 +18,6 @@ public class DownloadController {
 
   @Autowired private BoardService boardService;
 
-
   @RequestMapping("/download/boardfile")
   public String execute(
       @RequestParam("fileNo") int fileNo,
@@ -55,7 +54,7 @@ public class DownloadController {
 
     } catch (Exception e) {
       e.printStackTrace();
-      return "/downloadfail.jsp";
+      return "downloadfail";
     }
     return null;
   }
