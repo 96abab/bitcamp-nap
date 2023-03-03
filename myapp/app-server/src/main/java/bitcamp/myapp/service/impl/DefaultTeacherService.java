@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.dao.TeacherDao;
@@ -15,7 +14,6 @@ import bitcamp.myapp.vo.Teacher;
 @Service
 public class DefaultTeacherService implements TeacherService {
 
-  @Autowired private PlatformTransactionManager txManager;
   @Autowired private MemberDao memberDao;
   @Autowired private TeacherDao teacherDao;
 
@@ -24,7 +22,6 @@ public class DefaultTeacherService implements TeacherService {
   public void add(Teacher teacher) {
     memberDao.insert(teacher);
     teacherDao.insert(teacher);
-
   }
 
   @Override

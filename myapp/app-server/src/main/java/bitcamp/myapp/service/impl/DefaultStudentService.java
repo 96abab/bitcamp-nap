@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import bitcamp.myapp.dao.MemberDao;
 import bitcamp.myapp.dao.StudentDao;
@@ -15,16 +14,16 @@ import bitcamp.myapp.vo.Student;
 @Service
 public class DefaultStudentService implements StudentService {
 
-  @Autowired private PlatformTransactionManager txManager;
   @Autowired private MemberDao memberDao;
   @Autowired private StudentDao studentDao;
+
   @Transactional
   @Override
   public void add(Student student) {
     memberDao.insert(student);
     studentDao.insert(student);
-
   }
+
   @Override
   public List<Student> list(String keyword) {
     return studentDao.findAll(keyword);
