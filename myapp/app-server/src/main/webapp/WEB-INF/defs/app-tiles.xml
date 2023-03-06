@@ -15,7 +15,7 @@
        TilesView 템플릿 엔진이 사용할 JSP URL을 정의한다. 
        예) return url ==> "board/list"
            body url ==> "/WEB-INF/tiles/boad/list.jsp" -->
-  <definition name="app/*/*" extends="app-base" >
+  <definition name="app/*/*" extends="app-base">
     <put-attribute name="body" value="/WEB-INF/tiles/{1}/{2}.jsp" />
   </definition>
   

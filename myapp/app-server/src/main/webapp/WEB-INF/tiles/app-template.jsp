@@ -12,13 +12,14 @@
 <title>비트캠프 - NCP 1기</title>
 <style>
   header {
-    height: 60 px;
-    background: gray;
+    height: 60px;
+    background-color: gray;
     color: black;
   }
-    footer {
-    height: 80 px;
-    background: green;
+  
+  footer {
+    height: 60px;
+    background-color: navy;
     color: white;
   }
 </style>
