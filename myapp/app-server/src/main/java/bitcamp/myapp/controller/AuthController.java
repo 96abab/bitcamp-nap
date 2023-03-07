@@ -3,6 +3,8 @@ package bitcamp.myapp.controller;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +17,10 @@ import bitcamp.myapp.vo.Member;
 @Controller
 public class AuthController {
 
+
+  Logger log = LogManager.getLogger(getClass());
   {
-    System.out.println("AuthController 생성됨!");
+    log.trace("AuthController 생성됨!");
   }
 
   @Autowired private StudentService studentService;

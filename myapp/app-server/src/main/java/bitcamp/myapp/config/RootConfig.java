@@ -2,6 +2,8 @@ package bitcamp.myapp.config;
 
 import javax.sql.DataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,9 +36,22 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 @EnableTransactionManagement
 public class RootConfig {
 
+  Logger log = LogManager.getLogger(getClass());
+
   {
-    System.out.println("RootConfig 생성됨!");
+    log.trace("RootConfig 생성됨!");
   }
+
+
+  //  public Rootconfig() {
+  //    LogManager.getLogger(getClass());
+  //    log.trace("RootConfig 생성됨! - TRACE");
+  //    log.debug("RootConfig 생성됨! - DEBUG");
+  //    log.info("RootConfig 생성됨! - INFO");
+  //    log.warn("RootConfig 생성됨! - WARN");
+  //    log.error("RootConfig 생성됨! - ERROR");
+  //    log.fatal("RootConfig 생성됨! - FATAL");
+  //  }
 
   @Bean
   public DataSource dataSource(
@@ -45,6 +60,7 @@ public class RootConfig {
       @Value("${jdbc.username}") String username,
       @Value("${jdbc.password}") String password) {
     DriverManagerDataSource ds = new DriverManagerDataSource();
+    log.trace("DriverManagerDataSource 객체 생성!");
     ds.setDriverClassName(jdbcDriver);
     ds.setUrl(url);
     ds.setUsername(username);
@@ -54,13 +70,17 @@ public class RootConfig {
 
   @Bean
   public PlatformTransactionManager transactionManager(DataSource dataSource) throws Exception {
-    System.out.println("PlatformTransactionManager 객체 생성! ");
+    log.trace("PlatformTransactionManager 객체 생성! ");
     return new DataSourceTransactionManager(dataSource);
   }
 
   @Bean
   public SqlSessionFactory sqlSessionFactory(DataSource dataSource, ApplicationContext appCtx) throws Exception {
-    System.out.println("SqlSessionFactory 객체 생성!");
+    log.trace("SqlSessionFactory 객체 생성!");
+
+    // Mybatis 로깅 기능을 활성화 시킨다.
+    org.apache.ibatis.logging.LogFactory.useLog4J2Logging();
+
     SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
     factoryBean.setDataSource(dataSource);
     factoryBean.setTypeAliasesPackage("bitcamp.myapp.vo");
@@ -79,6 +99,7 @@ public class RootConfig {
   @Bean
   public SpringResourceTemplateResolver templateResolver(ApplicationContext applicationContext){
     SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+    log.trace("SpringResourceTemplateResolver 객체 생성!");
     templateResolver.setApplicationContext(applicationContext);
     templateResolver.setPrefix("/WEB-INF/thymeleaf/");
     templateResolver.setSuffix(".html");
@@ -91,6 +112,7 @@ public class RootConfig {
   @Bean
   public SpringTemplateEngine templateEngine(ITemplateResolver templateResolver){
     SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+    log.trace("SpringTemplateEngine 객체 생성!");
     templateEngine.setTemplateResolver(templateResolver);
     templateEngine.setEnableSpringELCompiler(true);
     return templateEngine;

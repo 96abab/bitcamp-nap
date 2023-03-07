@@ -1,6 +1,8 @@
 package bitcamp.myapp.config;
 
 import java.nio.charset.StandardCharsets;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
@@ -39,10 +41,12 @@ import bitcamp.myapp.web.interceptor.AuthInterceptor;
 @EnableWebMvc
 public class AppConfig implements WebMvcConfigurer {
 
-  {
-    System.out.println("AppConfig 생성됨!");
-  }
 
+  Logger log = LogManager.getLogger(getClass());
+
+  {
+    log.trace("RootConfig 생성됨!");
+  }
   @Bean
   public MultipartResolver multipartResolver() {
     return new StandardServletMultipartResolver();
@@ -54,6 +58,7 @@ public class AppConfig implements WebMvcConfigurer {
     // viewResolver가 그 경로를 가지고 최종 jsp 경로를 계산한 다음에
     // JstlView를 통해 실행한다.
     InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+    log.trace("InternalResourceViewResolver 생성됨!");
     viewResolver.setViewClass(JstlView.class);
     viewResolver.setPrefix("/WEB-INF/jsp/");
     viewResolver.setSuffix(".jsp");
@@ -63,6 +68,7 @@ public class AppConfig implements WebMvcConfigurer {
 
   @Bean
   public ViewResolver tilesViewResolver() {
+    log.trace("tilesViewResolver 생성됨!");
     UrlBasedViewResolver vr = new UrlBasedViewResolver();
 
     // Tiles 설정에 따라 템플릿을 실행할 뷰 처리기를 등록한다.
@@ -80,6 +86,7 @@ public class AppConfig implements WebMvcConfigurer {
   @Bean
   public ThymeleafViewResolver viewResolver(ISpringTemplateEngine templateEngine){
     ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+    log.trace("ThymeleafViewResolver 생성됨!");
     viewResolver.setTemplateEngine(templateEngine);
 
     // Content-Type을 설정한다.
