@@ -25,6 +25,12 @@
             => factory-bean 속성을 설정하면 factory-method는 
                스태틱 메서드가 아니라 인스턴스 메서드를 가리키게 된다.
      -->
+     <bean id="c2"
+           factory-bean="carFactory"
+           factory-method="create">
+           <constructor-arg value="소나타"/>
+     
+     </bean>
     
 </beans>
 

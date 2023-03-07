@@ -11,6 +11,7 @@ public class Exam01 {
         "com/eomcs/spring/ioc/ex06/c/application-context.xml");
 
     System.out.println(iocContainer.getBean("c1"));
+    System.out.println(iocContainer.getBean("c2"));
   }
 
 }

@@ -16,7 +16,6 @@ public class TeacherController {
   {
     System.out.println("TeacherController 생성됨!");
   }
-
   @Autowired private TeacherService teacherService;
 
   @GetMapping("form")
@@ -34,8 +33,9 @@ public class TeacherController {
   }
 
   @GetMapping("list")
-  public void list(Model model) {
-    model.addAttribute("teachers", teacherService.list());
+  public String list(String keyword,Model model) {
+    model.addAttribute("teachers", teacherService.list(keyword));
+    return "teacher/list.html";
   }
 
   @GetMapping("view")
