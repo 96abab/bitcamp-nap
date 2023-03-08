@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='UTF-8'>
+<title>비트캠프 - NCP 1기</title>
+</head>
+<body>
+<h1>게시판</h1>
+
+<div><a href='form.html'>새 글</a></div>
+
+<table border='1' id="board-table">
+<thead>
+<tr>
+  <th>번호</th> <th>제목</th> <th>작성자</th> <th>작성일</th> <th>조회수</th>
+</tr>
+</thead>
+
+<tbody></tbody>
+
+
+</table>
+
+<form action='list' method='get'>
+  <input type='text' name='keyword' value=''>
+  <button>검색</button>
+</form>
+
+<script>
+fetch("../app/board/list")
+.then((response) => {
+	// json() 은 Promise 객체를 리턴
+	// Promise 객체가 하는일 :
+		
+	// - 서버에서 응답콘텐트를 모두 받고
+	// - JSON 포맷의 문자열을 JavaScript 객체로 변환한다
+	// - resolve() 를 호출 다음 Promise객체에  변환된 javaScript 객체를 전달
+	return response.json(); 
+})
+.then((boards) => {
+	let tbody = "";
+	  boards.forEach(board => {
+		
+	  let html = `
+		  <tr>
+		     <td>${board.no}]</td> 
+		     <td><a href='view.html?no=${board.no}'>${board.title}</a></td> 
+		     <td>${board.writer.name}</td>
+		     <td>${board.createdDate}</td> 
+		     <td>${board.viewCount}</td>
+		  </tr>
+		  `;
+		  tbody += html;
+	  });
+	  document.querySelector("#board-table > tbody").innerHTML = tbody;
+});
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
