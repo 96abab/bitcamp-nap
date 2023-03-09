@@ -51,4 +51,5 @@ public class TeacherController {
   public void delete(int no, Model model) {
     teacherService.delete(no);
   }
+
 }

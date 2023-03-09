@@ -15,7 +15,7 @@ public class AdminCheckInterceptor implements HandlerInterceptor {
   @Override
   public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
       throws Exception {
-    log.trace("preHandle() 호출");
+    log.trace("preHandle() 호출됨!");
     Member loginUser = (Member) request.getSession().getAttribute("loginUser");
     if (!loginUser.getEmail().equals("admin@test.com")) {
       response.sendRedirect(request.getContextPath() + "/app/auth/form");
@@ -27,7 +27,13 @@ public class AdminCheckInterceptor implements HandlerInterceptor {
   @Override
   public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
       ModelAndView modelAndView) throws Exception {
-    log.trace("postHandle() 호출");
+    log.trace("postHandle() 호출됨!");
+  }
+
+  @Override
+  public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+      Object handler, Exception ex) throws Exception {
+    log.trace("afterCompletion() 호출됨!");
   }
 }
 

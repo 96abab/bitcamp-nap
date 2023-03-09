@@ -13,7 +13,6 @@ import bitcamp.myapp.vo.BoardFile;
 @Service
 public class DefaultBoardService implements BoardService {
 
-
   @Autowired private BoardDao boardDao;
   @Autowired private BoardFileDao boardFileDao;
 

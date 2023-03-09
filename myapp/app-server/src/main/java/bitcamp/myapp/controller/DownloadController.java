@@ -48,14 +48,16 @@ public class DownloadController {
     response.setHeader("Content-Disposition",
         String.format("attachment; filename=\"%s\"", boardFile.getOriginalFilename()));
 
-    BufferedInputStream fileIn = new BufferedInputStream(new FileInputStream(downloadFile));
-    BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
+    try (
+        BufferedInputStream fileIn = new BufferedInputStream(new FileInputStream(downloadFile));
+        BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());) {
 
-    int b;
-    while ((b = fileIn.read()) != -1) {
-      out.write(b);
+      int b;
+      while ((b = fileIn.read()) != -1) {
+        out.write(b);
+      }
+      out.flush();
     }
-    out.flush();
 
     return null;
   }

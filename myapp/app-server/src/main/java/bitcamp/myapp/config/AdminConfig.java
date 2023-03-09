@@ -38,8 +38,9 @@ public class AdminConfig implements WebMvcConfigurer {
   Logger log = LogManager.getLogger(getClass());
 
   {
-    log.trace("RootConfig 생성됨!");
+    log.trace("AdminConfig 생성됨!");
   }
+
   @Bean
   public ViewResolver viewResolver() {
     log.trace("InternalResourceViewResolver 생성됨!");
@@ -75,7 +76,7 @@ public class AdminConfig implements WebMvcConfigurer {
   // WebMvcConfigurer 규칙에 맞춰 인터셉터를 등록한다.
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    log.trace("AdminConfig.addInterceptors() 생성됨!");
+    log.trace("AdminConfig.addInterceptors() 호출됨!");
     registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/**");
     registry.addInterceptor(new AdminCheckInterceptor()).addPathPatterns("/**");
   }
