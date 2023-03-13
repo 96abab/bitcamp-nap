@@ -34,22 +34,16 @@
 </form>
 
 <script>
-//setCookie('test1', 'value1', 20, '/');
-//setCookie('test2', 'value2', 40, '/');
-console.log(document.cookie);
-
-
 
 document.querySelector('input[name="email"]').value = getCookie('email');
 
 document.querySelector('#btn-login').onclick = () => {
-	// 이메일을 쿠키에 보관
-	if (document.querySelector('input[type="checkbox"]:checked') != null) {
-		setCookie('email', document.querySelector('input[name="email"]').value, 60 * 60 * 24 * 7);
-	} else {
-		setCookie('email', '', 0);
-	}
-	
+  // 이메일을 쿠키에 보관
+  if (document.querySelector('input[type="checkbox"]:checked') != null) {
+    setCookie('email', document.querySelector('input[name="email"]').value, 60 * 60 * 24 * 7);
+  } else {
+	  setCookie('email', '', 0);
+  }
 	
   const form = document.querySelector('#login-form');
   const formData = new FormData(form);
@@ -93,7 +87,7 @@ function setCookie(cookieName, cookieValue, cookieMaxAge, cookiePath, cookieDoma
     cookieText+=(cookieMaxAge ? '; max-age='+cookieMaxAge : '');
     cookieText+=(cookiePath ? '; path='+cookiePath : '');
     cookieText+=(cookieDomain ? '; domain='+cookieDomain : '');
-    cookieText+=(cookieSecure ? '; SECURE' : '');
+    cookieText+=(cookieSecure ? '; secure' : '');
     document.cookie=cookieText;
 }
 </script>
