@@ -71,8 +71,6 @@ public class RootConfig {
     factoryBean.setMapperLocations(appCtx.getResources("classpath*:bitcamp/myapp/mapper/*Mapper.xml"));
     return factoryBean.getObject();
   }
-
-
 }
 
 
