@@ -22,6 +22,25 @@
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
     <!-- 리액트로 UI를 생성하는 자바스크립트 코드 -->
-    <script src="test6.js"></script>
+    <script src="test.js"></script>
+
+    <script>
+      function Board() {
+        (this.title = "제목1"),
+          (this.print = () => {
+            console.log(this.title);
+          });
+      }
+
+      let board = new Board();
+      board.print();
+
+      let board2 = {
+        title: "제목2",
+        m: board.print,
+      };
+
+      board2.m();
+    </script>
   </body>
 </html>

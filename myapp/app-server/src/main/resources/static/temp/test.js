@@ -1,5 +1,10 @@
 "use strict";
 
+// 비제어 컴포넌트 - 파일 입력 태그
+// => <input type="file" />은 항상 비제어 컴포넌트다.
+// => 프로그래밍으로 값을 다룰 수 없다.
+//
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -8,53 +13,44 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-console.log("시이작");
+var FileInput = function (_React$Component) {
+  _inherits(FileInput, _React$Component);
 
-// 좋아요 버튼 리액트 컴퍼넌트 정의
+  function FileInput(props) {
+    _classCallCheck(this, FileInput);
 
-var LikeButton = function (_React$Component) {
-  _inherits(LikeButton, _React$Component);
+    var _this = _possibleConstructorReturn(this, (FileInput.__proto__ || Object.getPrototypeOf(FileInput)).call(this, props));
 
-  function LikeButton(props) {
-    _classCallCheck(this, LikeButton);
-
-    var _this = _possibleConstructorReturn(this, (LikeButton.__proto__ || Object.getPrototypeOf(LikeButton)).call(this, props));
-
-    _this.state = {
-      liked: false
-    };
+    _this.fileInput = React.createRef();
+    _this.handleSubmit = _this.handleSubmit.bind(_this);
     return _this;
   }
 
-  // 부모 컴포넌트에서 순차적으로 내려오면서 호출됨
-  // 하는 일은 HTML 태그를 생성하는 일을 한다
-  // 또는 하위 컴포넌트를 실행하는 일을 한다
-
-
-  _createClass(LikeButton, [{
+  _createClass(FileInput, [{
+    key: "handleSubmit",
+    value: function handleSubmit(event) {
+      event.preventDefault();
+      alert("Selected file:  " + this.fileInput.current.files[0].name);
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
-
-      if (this.state.liked) {
-        return "좋아합니다";
-      }
-
       return React.createElement(
-        "button",
-        { onClick: function onClick() {
-            return _this2.setState({ liked: true });
-          } },
-        "\uC88B\uC544\uC694"
+        "form",
+        { onSubmit: this.handleSubmit },
+        React.createElement(
+          "label",
+          null,
+          "Upload file:",
+          React.createElement("input", { type: "file", ref: this.fileInput })
+        ),
+        React.createElement("input", { type: "submit", value: "Submit" })
       );
     }
   }]);
 
-  return LikeButton;
+  return FileInput;
 }(React.Component);
 
-document.querySelectorAll(".like-container").forEach(function (likeContainer) {
-  var root = ReactDOM.createRoot(likeContainer);
-  root.render(React.createElement(LikeButton));
-});
-console.log("조옹료");
+var root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(React.createElement(FileInput, null));
