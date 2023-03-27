@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS lms_class RESTRICT;
 -- 회원
 DROP TABLE IF EXISTS lms_member RESTRICT;
 
--- 교육 센터
+-- 교육센터
 DROP TABLE IF EXISTS lms_edu_center RESTRICT;
 
 -- 부서
@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS lms_department RESTRICT;
 DROP TABLE IF EXISTS lms_degree RESTRICT;
 
 -- 강의실사진
-DROP TABLE IF EXISTS lms_classphoto RESTRICT;
+DROP TABLE IF EXISTS lms_class_photo RESTRICT;
 
 -- 기본주소
 DROP TABLE IF EXISTS lms_addr RESTRICT;
@@ -121,7 +121,7 @@ ALTER TABLE lms_manager
 CREATE TABLE lms_class (
   class_id      INTEGER     NOT NULL COMMENT '강의실번호', -- 강의실번호
   edu_center_id INTEGER     NOT NULL COMMENT '교육센터번호', -- 교육센터번호
-  neme          VARCHAR(60) NOT NULL COMMENT '강의실명', -- 강의실명
+  name          VARCHAR(60) NOT NULL COMMENT '강의실명', -- 강의실명
   capacity      INTEGER     NOT NULL COMMENT '수용인원' -- 수용인원
 )
 COMMENT '강의실';
@@ -136,7 +136,7 @@ ALTER TABLE lms_class
 -- 강의실 인덱스
 CREATE INDEX IX_lms_class
   ON lms_class( -- 강의실
-    neme ASC -- 강의실명
+    name ASC -- 강의실명
   );
 
 ALTER TABLE lms_class
@@ -178,7 +178,7 @@ CREATE INDEX IX_lms_member
 ALTER TABLE lms_member
   MODIFY COLUMN member_id INTEGER NOT NULL AUTO_INCREMENT COMMENT '회원번호';
 
--- 교육 센터
+-- 교육센터
 CREATE TABLE lms_edu_center (
   edu_center_id  INTEGER      NOT NULL COMMENT '교육센터번호', -- 교육센터번호
   name           VARCHAR(60)  NOT NULL COMMENT '센터명', -- 센터명
@@ -187,18 +187,18 @@ CREATE TABLE lms_edu_center (
   tel            VARCHAR(30)  NOT NULL COMMENT '센터전화', -- 센터전화
   fax            VARCHAR(30)  NULL     COMMENT '센터팩스' -- 센터팩스
 )
-COMMENT '교육 센터';
+COMMENT '교육센터';
 
--- 교육 센터
+-- 교육센터
 ALTER TABLE lms_edu_center
-  ADD CONSTRAINT PK_lms_edu_center -- 교육 센터 기본키
+  ADD CONSTRAINT PK_lms_edu_center -- 교육센터 기본키
   PRIMARY KEY (
   edu_center_id -- 교육센터번호
   );
 
--- 교육 센터 유니크 인덱스
+-- 교육센터 유니크 인덱스
 CREATE UNIQUE INDEX UIX_lms_edu_center
-  ON lms_edu_center ( -- 교육 센터
+  ON lms_edu_center ( -- 교육센터
     name ASC -- 센터명
   );
 
@@ -231,7 +231,7 @@ ALTER TABLE lms_department
 -- 학력
 CREATE TABLE lms_degree (
   degree_id INTEGER     NOT NULL COMMENT '학력번호', -- 학력번호
-  title     VARCHAR(60) NOT NULL COMMENT '최종학력' -- 최종학력
+  degr_name VARCHAR(60) NOT NULL COMMENT '최종학력' -- 최종학력
 )
 COMMENT '학력';
 
@@ -245,14 +245,14 @@ ALTER TABLE lms_degree
 -- 학력 유니크 인덱스
 CREATE UNIQUE INDEX UIX_lms_degree
   ON lms_degree ( -- 학력
-    title ASC -- 최종학력
+    degr_name ASC -- 최종학력
   );
 
 ALTER TABLE lms_degree
   MODIFY COLUMN degree_id INTEGER NOT NULL AUTO_INCREMENT COMMENT '학력번호';
 
 -- 강의실사진
-CREATE TABLE lms_classphoto (
+CREATE TABLE lms_class_photo (
   class_photo_id  INTEGER      NOT NULL COMMENT '강의실사진번호', -- 강의실사진번호
   photo_path      VARCHAR(255) NOT NULL COMMENT '사진', -- 사진
   origin_filename VARCHAR(60)  NOT NULL COMMENT '원래사진파일명', -- 원래사진파일명
@@ -262,13 +262,13 @@ CREATE TABLE lms_classphoto (
 COMMENT '강의실사진';
 
 -- 강의실사진
-ALTER TABLE lms_classphoto
-  ADD CONSTRAINT PK_lms_classphoto -- 강의실사진 기본키
+ALTER TABLE lms_class_photo
+  ADD CONSTRAINT PK_lms_class_photo -- 강의실사진 기본키
   PRIMARY KEY (
   class_photo_id -- 강의실사진번호
   );
 
-ALTER TABLE lms_classphoto
+ALTER TABLE lms_class_photo
   MODIFY COLUMN class_photo_id INTEGER NOT NULL AUTO_INCREMENT COMMENT '강의실사진번호';
 
 -- 기본주소
@@ -286,15 +286,10 @@ ALTER TABLE lms_addr
   addr_id -- 기본주소번호
   );
 
--- 기본주소 유니크 인덱스
-CREATE UNIQUE INDEX UIX_lms_addr
-  ON lms_addr ( -- 기본주소
-  );
-
 -- 기본주소 인덱스
 CREATE INDEX IX_lms_addr
   ON lms_addr( -- 기본주소
-    basic_address ASC -- 기본주소
+    postno ASC -- 우편번호
   );
 
 ALTER TABLE lms_addr
@@ -335,7 +330,7 @@ ALTER TABLE lms_lecture_teacher
 -- 신청상태
 CREATE TABLE lms_application_state (
   application_state_id VARCHAR(10) NOT NULL COMMENT '신청상태번호', -- 신청상태번호
-  status_name          VARCHAR(60) NOT NULL COMMENT '상태명' -- 상태명
+  status_name          VARCHAR(60) NULL     COMMENT '상태명' -- 상태명
 )
 COMMENT '신청상태';
 
@@ -408,11 +403,11 @@ ALTER TABLE lms_manager
 
 -- 강의실
 ALTER TABLE lms_class
-  ADD CONSTRAINT FK_lms_edu_center_TO_lms_class -- 교육 센터 -> 강의실
+  ADD CONSTRAINT FK_lms_edu_center_TO_lms_class -- 교육센터 -> 강의실
   FOREIGN KEY (
   edu_center_id -- 교육센터번호
   )
-  REFERENCES lms_edu_center ( -- 교육 센터
+  REFERENCES lms_edu_center ( -- 교육센터
   edu_center_id -- 교육센터번호
   );
 
@@ -436,9 +431,9 @@ ALTER TABLE lms_member
   addr_id -- 기본주소번호
   );
 
--- 교육 센터
+-- 교육센터
 ALTER TABLE lms_edu_center
-  ADD CONSTRAINT FK_lms_addr_TO_lms_edu_center -- 기본주소 -> 교육 센터
+  ADD CONSTRAINT FK_lms_addr_TO_lms_edu_center -- 기본주소 -> 교육센터
   FOREIGN KEY (
   addr_id -- 기본주소번호
   )
@@ -447,8 +442,8 @@ ALTER TABLE lms_edu_center
   );
 
 -- 강의실사진
-ALTER TABLE lms_classphoto
-  ADD CONSTRAINT FK_lms_class_TO_lms_classphoto -- 강의실 -> 강의실사진
+ALTER TABLE lms_class_photo
+  ADD CONSTRAINT FK_lms_class_TO_lms_class_photo -- 강의실 -> 강의실사진
   FOREIGN KEY (
   class_id -- 강의실번호
   )

@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat.Shape;
 import lombok.Data;
 
 @Data
-public class Member implements java.io.Serializable {
-  private static final long serialVersionUID = 1L;
-
+public class Member {
   private int no;
   private String name;
   private String email;

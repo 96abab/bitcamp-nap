@@ -37,7 +37,7 @@ public class DownloadController {
       throw new RuntimeException("파일 정보 없음!");
     }
 
-    File downloadFile = new File(System.getProperty("user.home") + "./webapp-upload/" + boardFile.getFilepath());
+    File downloadFile = new File(System.getProperty("user.home") + "/webapp-upload/" + boardFile.getFilepath());
     if (!downloadFile.exists()) {
       throw new RuntimeException("파일이 존재하지 않음!");
     }
