@@ -7,7 +7,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class Teacher extends Member{
+public class Client extends Member{
   private int degree;
   private String school;
   private String major;

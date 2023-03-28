@@ -27,6 +27,7 @@ public class App implements WebMvcConfigurer {
     registry.addInterceptor(new AuthInterceptor()).excludePathPatterns("/auth/**");
     registry.addInterceptor(new AdminCheckInterceptor()).addPathPatterns("/students/**");
     registry.addInterceptor(new AdminCheckInterceptor()).addPathPatterns("/teachers/**");
+    registry.addInterceptor(new AdminCheckInterceptor()).addPathPatterns("/clients/**");
   }
 
   // Cross-Origin 관련해서 기본 값 외에 추가로 설정할 게 있다면 이 메서드를 정의한다.

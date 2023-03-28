@@ -55,6 +55,22 @@ alter table app_teacher
 alter table app_teacher
   modify column degree int not null,
   modify column wage int not null;
+  
+  create table app_client(
+  member_id int not null,
+  degree int,
+  school varchar(50),
+  major varchar(50),
+  wage int
+);
+
+alter table app_client
+  add constraint primary key (member_id),
+  add constraint app_client_fk foreign key (member_id) references app_member (member_id);
+
+alter table app_client
+  modify column degree int not null,
+  modify column wage int not null;
 
 
 
