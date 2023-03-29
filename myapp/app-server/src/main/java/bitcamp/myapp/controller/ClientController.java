@@ -17,7 +17,7 @@ import bitcamp.util.RestResult;
 import bitcamp.util.RestStatus;
 
 @RestController
-@RequestMapping("/client")
+@RequestMapping("/clients")
 public class ClientController {
 
   Logger log = LogManager.getLogger(getClass());
