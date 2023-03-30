@@ -33,7 +33,7 @@ function showEdit() {
   }
 }
 
-function getTeachers(keyword) {
+function getClients(keyword) {
   let qs = "";
   if (keyword) {
     qs = `?keyword=${keyword}`;
