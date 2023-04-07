@@ -20,3 +20,8 @@ article {
 .invisible { 
   display: none;
 }
+
+#f-photo {
+	width: 80px;
+	height: 80px;
+}
